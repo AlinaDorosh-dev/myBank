@@ -1,0 +1,2 @@
+20230302	16:32:54	67d120c1-4b02-49a1-8bb4-23d53bac4cee	ReferenceError: kHeaders is not defined	GET	/auth/refresh	undefined
+20230302	16:33:55	147b1e6f-a733-47ca-b873-07bdb5638e1e	ReferenceError: kHeaders is not defined	GET	/auth/refresh	undefined

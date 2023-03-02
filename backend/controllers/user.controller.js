@@ -1,6 +1,5 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
 const { generateAccessToken, generateRefreshToken } = require("../utils/jwt");
 // @desc Create new user
@@ -38,11 +37,11 @@ const createNewUser = asyncHandler(async (req, res) => {
     newUser.save().then((newUser) => {
       const accessToken = generateAccessToken(newUser);
       const refreshToken = generateRefreshToken(newUser);
-      
+
       res.cookie("jwt", refreshToken, {
         httpOnly: true, //accessible only by web server
         secure: process.env.NODE_ENV !== "development", //if https set to true
-        sameSite: "None", //cross-site cookie
+        //cross-site cookie sameSite: "None",
         maxAge: 7 * 24 * 60 * 60 * 1000, //cookie expiry: set to match refreshToken expiry
       });
       res.status(201).json({
@@ -73,6 +72,40 @@ const createNewUser = asyncHandler(async (req, res) => {
       .json({ status: "failed", data: null, message: error.message });
   }
 });
+
+// @desc Update user profile
+// @route PATCH auth/user/:id
+// @access Private
+
+const updateUser = asyncHandler(async (req, res) => {
+  try {
+    const foundUser = await User.findById(req.params.id);
+
+    // Check for user
+    if (!req.user || !foundUser) {
+      res.status(401);
+      throw new Error("User not found");
+    }
+    //encrypt password if it is provided
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body.password
+        ? { ...req.body, password: await bcrypt.hash(req.body.password, 10) }
+        : req.body,
+      {
+        new: true,
+      }
+    );
+
+    res.status(200).json({ status: "succeeded", updatedUser, error: null });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ status: "failed", data: null, message: error.message });
+  }
+});
+
 module.exports = {
-  createNewUser,
+  createNewUser, 
+  updateUser, 
 };
