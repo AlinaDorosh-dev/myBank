@@ -1,16 +1,14 @@
+const { MongoClient } = require("mongodb");
+const { ObjectId } = require("mongodb");
 /**
  * Transfer money from one bank account to another using
- * @param {MongoClient} client A MongoClient that is connected to a cluster with the banking database
+  * MongoDB transactions
  * @param {String} sourceAccount The _id of the account where money should be subtracted
  * @param {String} destinationAccount The _id of the account where money should be added
  * @param {Number} amount The amount of money to be transferred
  */
-async function transferMoney(
-  client,
-  sourceAccount,
-  destinationAccount,
-  amount
-) {
+async function transferMoney(sourceAccount, destinationAccount, amount) {
+  const client = new MongoClient(process.env.DATABASE_URI);
   /**
    * The accounts collection in the banking database
    */
@@ -32,14 +30,13 @@ async function transferMoney(
     // Note: The callback for withTransaction MUST be async and/or return a Promise.
     // See https://mongodb.github.io/node-mongodb-native/3.6/api/ClientSession.html#withTransaction for the withTransaction() docs
     const transactionResults = await session.withTransaction(async () => {
-      // Important:: You must pass the session to each of the operations
-
       // Remove the money from the first account
       const subtractMoneyResults = await accountsCollection.updateOne(
-        { _id: sourceAccount },
+        { _id: new ObjectId(sourceAccount) },
         { $inc: { balance: amount * -1 } },
         { session }
       );
+
       console.log(
         `${subtractMoneyResults.matchedCount} document(s) found in the accounts collection with _id ${sourceAccount}.`
       );
@@ -53,7 +50,7 @@ async function transferMoney(
 
       // Add the money to the second account
       const addMoneyResults = await accountsCollection.updateOne(
-        { _id: destinationAccount },
+        { _id: new ObjectId(destinationAccount) },
         { $inc: { balance: amount } },
         { session }
       );

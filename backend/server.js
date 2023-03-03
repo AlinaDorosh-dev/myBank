@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 mongoose.set("strictQuery", true);
 const { logger,logEvents } = require("./middleware/logger");
 const cookieParser = require("cookie-parser");
-const connectDB = require("./config/dbConn");
+const {connectDB} = require("./config/dbConn");
 
 const errorHandler = require("./middleware/errorHandler");
 
@@ -28,6 +28,8 @@ app.use(logger);
 
 app.use("/auth", require("./routes/auth.routes"));
 app.use("/accounts", require("./routes/account.routes"));
+app.use("/transactions", require("./routes/transaction.routes"));
+
 app.use(errorHandler)
 db.once("open", () => {
     console.log("Connected to MongoDB");

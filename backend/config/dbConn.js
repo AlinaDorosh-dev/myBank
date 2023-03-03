@@ -2,22 +2,7 @@ const mongoose = require("mongoose");
 const { MongoClient } = require("mongodb");
 
 async function main() {
-  /**
-   * Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
-   * See https://docs.mongodb.com/ecosystem/drivers/node/ for more details
-   */
-  const uri = process.env.DATABASE_URI
-   
-
-  /**
-   * The Mongo Client you will use to interact with your database
-   * See https://mongodb.github.io/node-mongodb-native/3.6/api/MongoClient.html for more details
-   * In case: '[MONGODB DRIVER] Warning: Current Server Discovery and Monitoring engine is deprecated...'
-   * pass option { useUnifiedTopology: true } to the MongoClient constructor.
-   * const client =  new MongoClient(uri, {useUnifiedTopology: true})
-   */
-  const client = new MongoClient(uri);
-
+  const client = new MongoClient(process.env.DATABASE_URI);
   try {
     // Connect to the MongoDB cluster
     await client.connect();
@@ -56,4 +41,4 @@ const connectDB = async () => {
   }
 };
 
-module.exports = connectDB;
+module.exports = {connectDB};

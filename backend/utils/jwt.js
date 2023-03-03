@@ -9,7 +9,7 @@ const jwt = require("jsonwebtoken");
     },
   };
   const options = {
-    expiresIn: "1h",
+    expiresIn: "1d",
   };
   return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, options);
 }

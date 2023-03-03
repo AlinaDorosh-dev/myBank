@@ -2,10 +2,10 @@ const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const asyncHandler = require("express-async-handler");
 const { generateAccessToken, generateRefreshToken } = require("../utils/jwt");
+
 // @desc Create new user
 // @route POST /signup
 // @access Private
-
 const createNewUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -76,7 +76,6 @@ const createNewUser = asyncHandler(async (req, res) => {
 // @desc Update user profile
 // @route PATCH auth/user/:id
 // @access Private
-
 const updateUser = asyncHandler(async (req, res) => {
   try {
     const foundUser = await User.findById(req.params.id);
@@ -106,6 +105,6 @@ const updateUser = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  createNewUser, 
-  updateUser, 
+  createNewUser,
+  updateUser,
 };

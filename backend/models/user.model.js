@@ -36,7 +36,7 @@ const userSchema = new Schema({
 
   documentType: {
     type: String,
-    enum: ["dni", "passport", "nie"],
+    enum: ["dni", "nie"],
     trim: true,
   },
 
@@ -44,7 +44,9 @@ const userSchema = new Schema({
     type: String,
     trim: true,
     minlength: 9,
-    // unique: true,
+    unique: true,
+    index: true,
+    sparse: true,
   },
 
   registerAt: {
@@ -76,7 +78,9 @@ const userSchema = new Schema({
   },
   phone: {
     type: Number,
-    // unique: true,
+    unique: true,
+    index: true,
+    sparse: true,
     minlength: 9,
     maxlength: 9,
   },
@@ -100,7 +104,7 @@ const userSchema = new Schema({
     trim: true,
     default: "user",
   },
-  accounts: [String],
+  accounts: [{ type: Schema.Types.ObjectId, ref: "Account"}],
   // cards: [String],
 });
 
