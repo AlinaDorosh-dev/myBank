@@ -112,3 +112,15 @@
 20230303	20:34:11	63d944fb-927e-427a-8e64-e06f802da06a	POST	/transactions	undefined
 20230303	20:47:17	5b296dce-2051-471c-bc3d-50c871e55b3f	POST	/transactions	undefined
 20230303	20:51:43	01551e98-5493-48e5-b591-359a0e98e96a	POST	/transactions	undefined
+20230304	13:12:22	24ac94b7-73a9-498b-a316-eb2ee8c02c40	POST	/auth/signup	undefined
+20230304	13:12:43	81831897-5cbd-43b9-ab32-14bfd8df872c	POST	/accounts/new	undefined
+20230304	13:13:25	64cce778-7a3c-4dda-955e-0947666bcc7c	POST	/auth/signup	undefined
+20230304	13:13:42	65dbe04d-9529-4059-b5d0-c95a1ca7dec7	POST	/accounts/new	undefined
+20230304	13:16:29	4dcf70d4-0e3c-4fe6-af43-2a6b5a1cc1c2	POST	/auth/signup	undefined
+20230304	13:16:46	4059df73-daf8-429a-9932-ae14b1d3c3b2	POST	/accounts/new	undefined
+20230304	13:17:30	77d802eb-d03f-4b0d-9796-4ef5ab6b535f	POST	/auth/signup	undefined
+20230304	13:17:59	c31451ef-1ed9-4634-bcf1-9765a35e6398	POST	/accounts/new	undefined
+20230304	13:19:58	6c286138-2b8a-4813-9a80-7b5a2e03263d	POST	/transactions	undefined
+20230304	13:20:10	52be27b0-0c71-4b31-a03c-9d763a8926ed	POST	/transactions	undefined
+20230304	13:20:38	0b9f75af-ad63-4c3b-b2d9-36dd4e20978f	POST	/transactions	undefined
+20230304	13:21:00	24c9f9ed-d099-4844-8029-51000f3527a6	POST	/transactions	undefined

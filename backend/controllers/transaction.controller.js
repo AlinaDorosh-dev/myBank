@@ -14,11 +14,63 @@ const transactionController = asyncHandler(async (req, res) => {
       .json({ status: "failed", data: null, error: "Unauthorized" });
   }
   const { amount, description, destinationAcc, sourceAcc } = req.body;
-  //TODO:
-  //comprobar que la cuenta origen y destino existen
-  //comprobar que la cuenta origen tiene saldo suficiente
-  //comprobar que la cuenta origen y destino son diferentes
-  //comprobar que la cuenta origen  pertenece al usuario
+
+  const foundSourceAccount = await Account.findById(sourceAcc);
+  const foundDestinationAccount = await Account.findById(destinationAcc);
+
+  switch (true) {
+    case !amount || !description || !destinationAcc || !sourceAcc:
+      return res.status(400).json({
+        status: "failed",
+        data: null,
+        error: "Transaction information is incomplete",
+      });
+
+    case amount <= 0:
+      return res.status(400).json({
+        status: "failed",
+        data: null,
+        error: "Amount must be greater than 0",
+      });
+    case sourceAcc === destinationAcc:
+      return res.status(400).json({
+        status: "failed",
+        data: null,
+        error: "Source and destination accounts must be different",
+      });
+    case !foundSourceAccount:
+      return res.status(400).json({
+        status: "failed",
+        data: null,
+        error: "Source account does not exist",
+      });
+    case !foundDestinationAccount:
+      return res.status(400).json({
+        status: "failed",
+        data: null,
+        error: "Destination account does not exist",
+      });
+    case req.user.id !== foundSourceAccount.user.toString():
+      return res.status(400).json({
+        status: "failed",
+        data: null,
+        error: "Source account does not belong to the user",
+      });
+
+    case foundSourceAccount.balance < amount:
+      return res.status(400).json({
+        status: "failed",
+        data: null,
+        error: "Source account does not have enough ballance",
+      });
+
+    case description.length < 5 || description.length > 100:
+      return res.status(400).json({
+        status: "failed",
+        data: null,
+        error: "Description must be between 5 and 100 characters",
+      });
+  }
 
   try {
     const newTransaction = await Transaction.create({
@@ -34,13 +86,11 @@ const transactionController = asyncHandler(async (req, res) => {
     });
 
     const client = new MongoClient(process.env.DATABASE_URI);
-    /**
-     * The accounts collection in the banking database
-     */
+
+    // The accounts collection in the banking database
     const accountsCollection = client.db("myBank").collection("accounts");
 
     // Step 1: Start a Client Session
-    // See https://mongodb.github.io/node-mongodb-native/3.6/api/MongoClient.html#startSession for the startSession() docs
     const session = client.startSession();
 
     // Step 2: Optional. Define options for the transaction
@@ -51,10 +101,10 @@ const transactionController = asyncHandler(async (req, res) => {
     };
 
     try {
+      
       // Step 3: Use withTransaction to start a transaction, execute the callback, and commit (or abort on error)
-      // Note: The callback for withTransaction MUST be async and/or return a Promise.
-      // See https://mongodb.github.io/node-mongodb-native/3.6/api/ClientSession.html#withTransaction for the withTransaction() docs
       const transactionResults = await session.withTransaction(async () => {
+
         // Remove the money from the first account
         const subtractMoneyResults = await accountsCollection.updateOne(
           { _id: new ObjectId(sourceAcc) },
@@ -72,6 +122,9 @@ const transactionController = asyncHandler(async (req, res) => {
           await session.abortTransaction();
           await Transaction.findByIdAndUpdate(newTransaction._id, {
             status: "canceled",
+          });
+          await Account.findByIdAndUpdate(sourceAcc, {
+            $pull: { pendingTransactions: newTransaction._id },
           });
           res
             .status(400)
@@ -96,6 +149,10 @@ const transactionController = asyncHandler(async (req, res) => {
           await Transaction.findByIdAndUpdate(newTransaction._id, {
             status: "canceled",
           });
+          await Account.findByIdAndUpdate(sourceAcc, {
+            $pull: { pendingTransactions: newTransaction._id },
+          });
+
           res
             .status(400)
             .json({ status: "failed", data: null, error: error.message });
@@ -124,6 +181,9 @@ const transactionController = asyncHandler(async (req, res) => {
         await Transaction.findByIdAndUpdate(newTransaction._id, {
           status: "canceled",
         });
+        await Account.findByIdAndUpdate(sourceAcc, {
+          $pull: { pendingTransactions: newTransaction._id },
+        });
         res
           .status(400)
           .json({ status: "failed", data: null, error: error.message });
@@ -133,10 +193,17 @@ const transactionController = asyncHandler(async (req, res) => {
         "The money was not transferred. The transaction was aborted due to an unexpected error: " +
           e
       );
+      await Transaction.findByIdAndUpdate(newTransaction._id, {
+        status: "canceled",
+      });
+      await Account.findByIdAndUpdate(sourceAcc, {
+        $pull: { pendingTransactions: newTransaction._id },
+      });
       res
         .status(400)
         .json({ status: "failed", data: null, error: error.message });
     } finally {
+
       // Step 4: End the session
       await session.endSession();
     }
