@@ -1,2 +1,5 @@
 20230302	16:32:54	67d120c1-4b02-49a1-8bb4-23d53bac4cee	ReferenceError: kHeaders is not defined	GET	/auth/refresh	undefined
 20230302	16:33:55	147b1e6f-a733-47ca-b873-07bdb5638e1e	ReferenceError: kHeaders is not defined	GET	/auth/refresh	undefined
+20230308	12:10:06	51021833-9781-45b2-861f-c13091319dd3	Error: Not allowed by CORS	OPTIONS	/auth/login	http://localhost:3000
+20230308	12:14:57	a7a9a0e6-c57d-44df-a157-b946e92d779c	Error: Not allowed by CORS	OPTIONS	/auth/login	http://localhost:3000
+20230308	12:16:25	7ff2bf23-b6f7-454d-8afb-76f2dca0fe25	Error: Not allowed by CORS	OPTIONS	/auth/login	http://localhost:3000

@@ -7,8 +7,8 @@ const { generateAccessToken, generateRefreshToken } = require("../utils/jwt");
 // @desc Login
 // @route POST /auth/login
 // @access Public
-
 const login = asyncHandler(async (req, res) => {
+  console.log(req.body)
   const { email, password } = req.body;
 
   if (!password || !email) {
@@ -46,12 +46,14 @@ const login = asyncHandler(async (req, res) => {
         });
         res.status(200).json({
           status: "success",
-          data:{
-            accessToken,
-            user_id: foundUser._id,
-          } ,
+          accessToken,
           message: "Logged in successfully",
         });
+        await User.findByIdAndUpdate(
+          foundUser._id,
+          { lastLogin: new Date() },
+          { new: true }
+        ).exec();
       }
     }
   } catch (error) {
