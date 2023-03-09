@@ -1,7 +1,9 @@
 import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 const ErrorPage = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
   return (
     <Box
       sx={{
@@ -9,6 +11,8 @@ const ErrorPage = () => {
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "column",
+        height: "100vh",
+        backgroundColor: theme.palette.primary.background,
       }}
     >
       <Typography variant='h2' align='center' mt={12} sx={{ display: "block" }}>

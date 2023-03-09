@@ -1,12 +1,20 @@
-import React from 'react'
-
+import { Box } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import SignUpForm from "../components/SignUpForm";
 const SignUp = () => {
-  return (
-    <h1 style={{
-        textAlign: 'center',
-        marginTop: '100px'
-    }}>SignUp</h1>
-  )
-}
+  const theme = useTheme();
 
-export default SignUp
+  return (
+    <Box
+      sx={{
+        height: "100vh",
+        backgroundColor: theme.palette.primary.background,
+        padding: 5,
+      }}
+    >
+      <SignUpForm />
+    </Box>
+  );
+};
+
+export default SignUp;

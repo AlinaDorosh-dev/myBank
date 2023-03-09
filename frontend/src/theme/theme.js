@@ -2,11 +2,6 @@ import { cyan, grey } from "@mui/material/colors";
 import { createTheme } from "@mui/material";
 
 const theme = createTheme({
-  //   heights: {
-  //     HEADER: "175px",
-  //     FOOTER: "64px",
-  //   },
-
   palette: {
     primary: {
       main: cyan[700],
@@ -25,7 +20,17 @@ const theme = createTheme({
     //
     // },
   },
-
+  // components: {
+  //   MuiTextField: {
+  //     styleOverrides: {
+  //       root: {
+  //         backgroundColor: cyan[50],
+  //         fontSize: ".2rem",
+  //         color: grey[800],
+  //       }
+  //     },
+  //   },
+  // },
   typography: {
     fontFamily: "Poppins, sans-serif",
     h2: {
@@ -33,8 +38,12 @@ const theme = createTheme({
       fontWeight: 700,
       color: grey[800],
     },
+    h4: { fontWeight: 700, color: grey[800] },
     h5: {
       fontWeight: 700,
+      color: grey[800],
+    },
+    body2: {
       color: grey[800],
     },
     button: {
@@ -46,7 +55,5 @@ const theme = createTheme({
     //   },
   },
 });
-
-
 
 export default theme;

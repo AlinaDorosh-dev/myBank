@@ -1,12 +1,20 @@
-import React from 'react'
+import { Box } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import LoginForm from "../components/LoginForm";
 
 const Login = () => {
+  const theme = useTheme();
   return (
-    <h1 style={{
-        textAlign: 'center',
-        marginTop: '100px'
-    }}>Login</h1>
-  )
-}
+    <Box
+      sx={{
+        height: "100vh",
+        backgroundColor: theme.palette.primary.background,
+        padding: 5,
+      }}
+    >
+      <LoginForm />
+    </Box>
+  );
+};
 
-export default Login
+export default Login;
