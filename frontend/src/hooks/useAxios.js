@@ -1,23 +1,18 @@
-import { useState, useEffect, useContext } from "react";
-//import useAuth from "./useAuth";
-import AuthContext from "../context/AuthProvider";
+import { useState, useEffect } from "react";
+import useAuth from "./useAuth";
+
 const useAxios = () => {
-  const { auth, setAuth } = useContext(AuthContext);
-  //const { auth, setAuth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const [response, setResponse] = useState([]);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); //different!
+  const [loading, setLoading] = useState(false);
   const [controller, setController] = useState();
 
-  useEffect(() => {
-    console.log("response", response);
-    console.log("auth", auth);
-    setAuth(response.accessToken);
-  }, [response]);
+  
 
   const axiosFetch = async (configObj) => {
     const { axiosInstance, method, url, requestConfig = {} } = configObj;
-
+    console.log("axiosFetch", configObj);
     try {
       setLoading(true);
 
@@ -30,7 +25,6 @@ const useAxios = () => {
       });
       // console.log(res);
       setResponse(res.data);
-         
     } catch (err) {
       console.log(err.message);
       setError(err.message);

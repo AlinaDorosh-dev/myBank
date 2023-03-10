@@ -9,9 +9,11 @@ import Layout from "./components/Layout";
 import Unathorithed from "./pages/Unathorithed";
 import RequireAuth from "./auth/RequireAuth";
 import { AuthProvider } from "./context/AuthProvider";
+import UserDashboard from "./pages/UserDashboard";
 
 function App() {
   return (
+   
     <AuthProvider>
       <Router>
         <Routes>

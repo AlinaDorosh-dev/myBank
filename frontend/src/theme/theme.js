@@ -20,19 +20,10 @@ const theme = createTheme({
     //
     // },
   },
-  // components: {
-  //   MuiTextField: {
-  //     styleOverrides: {
-  //       root: {
-  //         backgroundColor: cyan[50],
-  //         fontSize: ".2rem",
-  //         color: grey[800],
-  //       }
-  //     },
-  //   },
-  // },
+
   typography: {
     fontFamily: "Poppins, sans-serif",
+    color: grey[800],
     h2: {
       fontSize: "3rem",
       fontWeight: 700,
@@ -43,6 +34,10 @@ const theme = createTheme({
       fontWeight: 700,
       color: grey[800],
     },
+    h6: {
+      fontWeight: 700,
+      color: grey[800],
+    },
     body2: {
       color: grey[800],
     },
@@ -50,9 +45,7 @@ const theme = createTheme({
       color: "#ffffff",
     },
 
-    //   myVariant: {
-    //     fontSize: 20,
-    //   },
+   
   },
 });
 

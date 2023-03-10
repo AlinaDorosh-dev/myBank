@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const addressSchema = new Schema({
+  address: {
+    type: String,
+  },
   city: {
     type: String,
   },
@@ -91,7 +94,7 @@ const userSchema = new Schema({
     type: Date,
   },
 
-  dniPhoto: {
+  attachment: {
     type: String,
   },
 

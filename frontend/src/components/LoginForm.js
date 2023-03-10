@@ -11,7 +11,7 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import useAuth from "../hooks/useAuth";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "../api/myBankApi";
+import axiosInstance from "../api/myBankApi";
 
 import useAxios from "../hooks/useAxios";
 import { useRef, useState, useEffect } from "react";
@@ -33,9 +33,16 @@ const LoginForm = () => {
   const [success, setSuccess] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
-useEffect(() => {
+  useEffect(() => {
+    if (data?.accessToken) {
+      setAuth(data.accessToken);
+    }
+  }, [data.accessToken]);
+
+  useEffect(() => {
+    console.log("auth", auth);
     auth && navigate("/dashboard");
-}, [auth]);
+  }, [auth]);
 
   const resetLoginState = () => {
     setEmail("");
@@ -54,16 +61,16 @@ useEffect(() => {
   const handleLogin = async () => {
     try {
       await axiosFetch({
-        axiosInstance: axios,
+        axiosInstance: axiosInstance(),
         method: "POST",
         url: LOGIN_URL,
         requestConfig: {
           email,
           password: pwd,
         },
-      })
-      
-    //  data ? navigate("/dashboard") : navigate("/unauthorized");
+      });
+
+      //  data ? navigate("/dashboard") : navigate("/unauthorized");
 
       //   console.log("data", data);
       //   const accessToken = data?.accessToken;

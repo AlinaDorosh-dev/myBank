@@ -3,6 +3,9 @@ const bcrypt = require("bcrypt");
 const asyncHandler = require("express-async-handler");
 const { generateAccessToken, generateRefreshToken } = require("../utils/jwt");
 
+
+
+
 // @desc Create new user
 // @route POST /signup
 // @access Private
@@ -77,6 +80,7 @@ const createNewUser = asyncHandler(async (req, res) => {
 // @route PATCH auth/user/:id
 // @access Private
 const updateUser = asyncHandler(async (req, res) => {
+  console.log("reqbody",req.body);
   try {
     const foundUser = await User.findById(req.params.id);
 
@@ -95,7 +99,7 @@ const updateUser = asyncHandler(async (req, res) => {
         new: true,
       }
     );
-
+console.log("user was updated", updatedUser);
     res.status(200).json({ status: "succeeded", updatedUser, error: null });
   } catch (error) {
     return res
@@ -104,7 +108,15 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Upload user document 
+// @route POST auth/user/upload/:id
+// @access Private
+const uploadDocument = asyncHandler(async (req, res) => {
+console.log(req.file);
+});
+
 module.exports = {
   createNewUser,
   updateUser,
+  uploadDocument,
 };

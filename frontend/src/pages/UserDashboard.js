@@ -1,6 +1,7 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import RegisterForm from "../components/RegisterForm";
+import RegistrationProvider from "../context/RegistrationProvider";
 const UserDashboard = ({ userId }) => {
   const theme = useTheme();
   return (
@@ -18,10 +19,9 @@ const UserDashboard = ({ userId }) => {
       >
         UserDashboard of {userId}
       </p>
-      <Typography variant='subtitle1'>
-        Finish your registration and open an account
-      </Typography>
-      <RegisterForm />
+      <RegistrationProvider userId={userId}>
+        <RegisterForm />
+      </RegistrationProvider>
     </Box>
   );
 };
