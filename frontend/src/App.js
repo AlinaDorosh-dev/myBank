@@ -10,7 +10,7 @@ import Unathorithed from "./pages/Unathorithed";
 import RequireAuth from "./auth/RequireAuth";
 import { AuthProvider } from "./context/AuthProvider";
 import UserDashboard from "./pages/UserDashboard";
-
+import AccountManagement from "./pages/AccountManagement";
 function App() {
   return (
    
@@ -19,7 +19,8 @@ function App() {
         <Routes>
           {/* public routes */}
           <Route path='/' element={<Layout />}>
-            <Route path='/' element={<HomePage />} />
+            <Route path='/' element={<AccountManagement/>} />
+            {/* <Route path='/' element={<HomePage />} />
             <Route path='login' element={<Login />} />
             <Route path='about' element={<About />} />
             <Route path='contact' element={<Contact />} />
@@ -28,7 +29,7 @@ function App() {
             <Route path='unathorithed' element={<Unathorithed />} />
             <Route path='*' element={<ErrorPage />} />
 
-            <Route path='dashboard' element={<RequireAuth />} />
+            <Route path='dashboard' element={<RequireAuth />} /> 
 
             {/* <Route element={<RequireAuth allowedRole='user' />}> */}
             {/* <Route path='dashboard' element={<UserDashboard />} /> */}

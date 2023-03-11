@@ -233,3 +233,5 @@
 20230310	13:43:20	ce1f66bf-21ea-4640-9b83-b0ca41a2ea9e	POST	/auth/login	http://localhost:3000
 20230310	13:44:39	1cad4d8d-854c-4b65-bd05-2670a22d076a	PATCH	/auth/user/640335a7d58a639d00ccb425	http://localhost:3000
 20230310	13:47:45	beff2e9c-461c-467c-874c-a2772daaed7d	PATCH	/auth/user/640335a7d58a639d00ccb425	http://localhost:3000
+20230310	18:19:43	a72beaa4-9b1b-4e80-9f06-5681da5f9d47	POST	/auth/login	http://localhost:3000
+20230310	22:08:22	d5fa2fc1-a4b3-496c-9e40-d11d226f05b5	POST	/auth/login	http://localhost:3000

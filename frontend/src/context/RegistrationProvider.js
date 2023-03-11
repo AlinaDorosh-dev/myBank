@@ -2,10 +2,11 @@ import { createContext, useState } from "react";
 import useAxios from "../hooks/useAxios";
 import useAuth from "../hooks/useAuth";
 import axiosInstance from "../api/myBankApi";
-
+import { useNavigate } from "react-router-dom";
 export const RegistrationContext = createContext({});
 
 const RegistrationProvider = ({ children, userId }) => {
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const steps = ["Personal Info", "Address", "Upload Document"];
   const [attachment, setAttachment] = useState(null);
@@ -28,16 +29,17 @@ const RegistrationProvider = ({ children, userId }) => {
     lastName,
     phone,
     birthDate,
-    address: { address, city, zipCode },
+    address,
+    city,
+    zipCode,
     documentType,
     documentNumber,
   } = userData;
   const USER_URL = `/auth/user/${userId}`;
   const [data, error, loading, axiosFetch] = useAxios();
-  const { auth, setAuth } = useAuth();
+  const { auth } = useAuth();
 
   const handleSubmit = () => {
-    console.log(userData);
     try {
       axiosFetch({
         axiosInstance: axiosInstance(auth),
@@ -48,13 +50,16 @@ const RegistrationProvider = ({ children, userId }) => {
           lastName,
           phone,
           birthDate,
-          address,
-          city,
-          zipCode,
+          address: {
+            address,
+            city,
+            zipCode,
+          },
           documentType,
           documentNumber,
         },
       });
+     // navigate("dashboard/accountmanagement");
     } catch (error) {
       console.log(error);
     }
