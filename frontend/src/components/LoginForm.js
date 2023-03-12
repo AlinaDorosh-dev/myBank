@@ -40,7 +40,6 @@ const LoginForm = () => {
   }, [data.accessToken]);
 
   useEffect(() => {
-    console.log("auth", auth);
     auth && navigate("/dashboard");
   }, [auth]);
 

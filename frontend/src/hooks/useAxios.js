@@ -8,11 +8,9 @@ const useAxios = () => {
   const [loading, setLoading] = useState(false);
   const [controller, setController] = useState();
 
-  
-
   const axiosFetch = async (configObj) => {
     const { axiosInstance, method, url, requestConfig = {} } = configObj;
-    console.log("axiosFetch", configObj);
+
     try {
       setLoading(true);
 
