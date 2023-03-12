@@ -6,31 +6,41 @@ import Contact from "./pages/Contact";
 import SignUp from "./pages/SignUp";
 import ErrorPage from "./pages/ErrorPage";
 import Layout from "./components/Layout";
-import Unathorithed from "./pages/Unathorithed";
+import Unauthorized from "./pages/Unauthorized";
 import RequireAuth from "./auth/RequireAuth";
 import { AuthProvider } from "./context/AuthProvider";
-import UserDashboard from "./pages/UserDashboard";
 import AccountManagement from "./pages/AccountManagement";
+import FinishRegistraton from "./pages/FinishRegistraton";
 function App() {
   return (
-   
     <AuthProvider>
       <Router>
         <Routes>
           {/* public routes */}
           <Route path='/' element={<Layout />}>
-            <Route path='/' element={<AccountManagement/>} />
-            {/* <Route path='/' element={<HomePage />} />
+            {/* <Route path='/' element={<AccountManagement/>} /> */}
+            <Route path='/' element={<HomePage />} />
             <Route path='login' element={<Login />} />
             <Route path='about' element={<About />} />
             <Route path='contact' element={<Contact />} />
             <Route path='signup' element={<SignUp />} />
             {/* <Route path='/forgot-password' element={<ForgotPassword />} /> */}
-            <Route path='unathorithed' element={<Unathorithed />} />
+            <Route path='unauthorized' element={<Unauthorized />} />
             <Route path='*' element={<ErrorPage />} />
 
-            <Route path='dashboard' element={<RequireAuth />} /> 
-
+            <Route
+              path='dashboard'
+              element={<RequireAuth allowedRole='user' />}
+            >
+              <Route
+                path='finish-registration'
+                element={<FinishRegistraton />}
+              />
+              <Route
+                path='account-management'
+                element={<AccountManagement />}
+              />
+            </Route>
             {/* <Route element={<RequireAuth allowedRole='user' />}> */}
             {/* <Route path='dashboard' element={<UserDashboard />} /> */}
             {/* <Route path='/dashboard' element={<Dashboard />} />

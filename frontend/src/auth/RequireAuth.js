@@ -1,26 +1,35 @@
-import { useLocation, Navigate } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import UserDashboard from "../pages/UserDashboard";
 import useAuth from "../hooks/useAuth";
+import { useEffect } from "react";
+const RequireAuth = ({ allowedRole }) => {
+  const navigate = useNavigate();
 
-const RequireAuth = () => {
-  const location = useLocation();
   const { auth } = useAuth();
-  console.log("auth", auth);
   const decoded = jwt_decode(auth);
   const userRole = decoded?.UserInfo?.role;
-  const userId = decoded?.UserInfo?.id;
-  console.log("userRole", userRole);
-  console.log("userId", userId);
+  const userVerified = decoded?.UserInfo?.verified;
 
-  return userRole === "user" ? (
-    <UserDashboard userId={userId} />
-  ) : (
-    <Navigate
-      to={{ pathname: "/unauthorized", state: { from: location } }}
-      replace
-    />
-  );
+  useEffect(() => {
+    switch (true) {
+      case !auth:
+        navigate("/login", { replace: true });
+        break;
+      case userRole !== allowedRole:
+        navigate("/unauthorized", { replace: true });
+        break;
+      case userRole === allowedRole && userVerified:
+        navigate("/dashboard/account-management", { replace: true });
+        break;
+      case userRole === allowedRole && !userVerified:
+        navigate("/dashboard/finish-registration", { replace: true });
+        break;
+      default:
+        navigate("/", { replace: true });
+        break;
+    }
+  }, []);
+  return <Outlet />;
 };
 
 export default RequireAuth;

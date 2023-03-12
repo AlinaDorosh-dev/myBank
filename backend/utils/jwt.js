@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
       id: user._id,
       email: user.email,
       role: user.role,
+      verified: user.userVerified,
     },
   };
   const options = {

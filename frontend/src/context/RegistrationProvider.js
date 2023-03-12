@@ -3,9 +3,11 @@ import useAxios from "../hooks/useAxios";
 import useAuth from "../hooks/useAuth";
 import axiosInstance from "../api/myBankApi";
 import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+
 export const RegistrationContext = createContext({});
 
-const RegistrationProvider = ({ children, userId }) => {
+const RegistrationProvider = ({ children }) => {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const steps = ["Personal Info", "Address", "Upload Document"];
@@ -38,6 +40,8 @@ const RegistrationProvider = ({ children, userId }) => {
   const USER_URL = `/auth/user/${userId}`;
   const [data, error, loading, axiosFetch] = useAxios();
   const { auth } = useAuth();
+  const decoded = jwt_decode(auth);
+  const userId = decoded?.UserInfo?.id;
 
   const handleSubmit = () => {
     try {
@@ -59,7 +63,7 @@ const RegistrationProvider = ({ children, userId }) => {
           documentNumber,
         },
       });
-     // navigate("dashboard/accountmanagement");
+      // navigate("dashboard/accountmanagement");
     } catch (error) {
       console.log(error);
     }
