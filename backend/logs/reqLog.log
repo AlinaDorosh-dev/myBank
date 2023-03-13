@@ -462,3 +462,7 @@
 20230313	22:43:37	407d89a0-c836-4e37-9b59-133af93bf960	GET	/accounts	http://localhost:3000
 20230313	22:43:45	e98c69b0-dcbf-4603-9c83-67bafa28f0a5	GET	/accounts	http://localhost:3000
 20230313	22:43:45	002cabf3-93f3-450d-bf04-729f12ade649	GET	/accounts	http://localhost:3000
+20230313	23:32:43	eaa3c0e9-231f-4620-b1ac-22c78887fa7e	POST	/auth/login	undefined
+20230313	23:33:14	410b9ae2-2a4a-4f99-acfd-d179f19e44ee	POST	/transactions	undefined
+20230313	23:33:44	b65c22d8-6287-458c-aa64-2fa6b959d672	POST	/transactions	undefined
+20230313	23:35:39	0db0e5f3-f8d2-4ffd-95ab-c8607e3b5de8	POST	/transactions	undefined

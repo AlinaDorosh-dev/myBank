@@ -1,6 +1,9 @@
 const asyncHandler = require("express-async-handler");
 const Account = require("../models/account.model");
 const Transaction = require("../models/transaction.model");
+const User = require("../models/user.model");
+const Notification = require("../models/notification.model");
+
 const { MongoClient } = require("mongodb");
 const { ObjectId } = require("mongodb");
 
@@ -101,10 +104,8 @@ const transactionController = asyncHandler(async (req, res) => {
     };
 
     try {
-      
       // Step 3: Use withTransaction to start a transaction, execute the callback, and commit (or abort on error)
       const transactionResults = await session.withTransaction(async () => {
-
         // Remove the money from the first account
         const subtractMoneyResults = await accountsCollection.updateOne(
           { _id: new ObjectId(sourceAcc) },
@@ -171,6 +172,17 @@ const transactionController = asyncHandler(async (req, res) => {
         await Account.findByIdAndUpdate(sourceAcc, {
           $pull: { pendingTransactions: newTransaction._id },
         });
+
+        const benefactor = await User.findById(foundSourceAccount.user);
+
+        const newNotification = await Notification.create({
+          user: foundDestinationAccount.user,
+          message: `You have received a new transaction from ${benefactor.firstName} ${benefactor.lastName} for ${amount}€`,
+        });
+
+        await User.findByIdAndUpdate(foundDestinationAccount.user, {
+          $push: { notifications: newNotification._id },
+        });
         res
           .status(200)
           .json({ status: "succeeded", data: newTransaction, error: null });
@@ -203,7 +215,6 @@ const transactionController = asyncHandler(async (req, res) => {
         .status(400)
         .json({ status: "failed", data: null, error: error.message });
     } finally {
-
       // Step 4: End the session
       await session.endSession();
     }

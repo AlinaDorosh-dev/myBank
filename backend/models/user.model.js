@@ -108,6 +108,8 @@ const userSchema = new Schema({
     default: "user",
   },
   accounts: [{ type: Schema.Types.ObjectId, ref: "Account"}],
+
+  notifications: [{ type: Schema.Types.ObjectId, ref: "Notification"}],
   // cards: [String],
 });
 
