@@ -4,7 +4,7 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { RegistrationContext } from "../context/RegistrationProvider";
+import { RegistrationContext } from "../../context/RegistrationProvider";
 import { useContext } from "react";
 export default function HorizontalLinearStepper() {
   const {

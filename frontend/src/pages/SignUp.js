@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import SignUpForm from "../components/SignUpForm";
+import SignUpForm from "../components/forms/SignUpForm";
 const SignUp = () => {
   const theme = useTheme();
 

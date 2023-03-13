@@ -14,7 +14,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useTheme } from "@mui/material/styles";
 import HorizontalLinearStepper from "./HorizontalLinearStepper";
-import { RegistrationContext } from "../context/RegistrationProvider";
+import { RegistrationContext } from "../../context/RegistrationProvider"
 import { useContext } from "react";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import { useState } from "react";

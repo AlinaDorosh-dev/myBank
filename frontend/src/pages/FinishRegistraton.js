@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import RegisterForm from "../components/RegisterForm";
+import RegisterForm from "../components/forms/RegisterForm";
 import RegistrationProvider from "../context/RegistrationProvider";
 
 const FinishRegistraton = () => {

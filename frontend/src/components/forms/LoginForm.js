@@ -9,11 +9,11 @@ import {
   IconButton,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 import { useLocation, useNavigate } from "react-router-dom";
-import axiosInstance from "../api/myBankApi";
+import axiosInstance from "../../api/myBankApi";
 
-import useAxios from "../hooks/useAxios";
+import useAxios from "../../hooks/useAxios";
 import { useRef, useState, useEffect } from "react";
 
 const LoginForm = () => {

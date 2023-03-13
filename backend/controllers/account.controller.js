@@ -2,19 +2,17 @@ const asyncHandler = require("express-async-handler");
 const Account = require("../models/account.model");
 const User = require("../models/user.model");
 
-
 //@desc Get all accounts from a user
 //@route GET /accounts
 //@access Private
 const getUsersAccounts = asyncHandler(async (req, res) => {
-  
   if (!req.user)
     return res
       .status(401)
       .json({ status: "failed", data: null, error: "Unauthorized" });
   try {
-    const accounts = await Account.find({ user: req.user.id });
-    console.log(accounts);
+    //find all active accounts from user
+    const accounts = await Account.find({ user: req.user.id, active: true });
     res.status(200).json({ status: "succeeded", data: accounts, error: null });
   } catch (error) {
     res
@@ -31,6 +29,16 @@ const createNewAccount = asyncHandler(async (req, res) => {
     return res
       .status(401)
       .json({ status: "failed", data: null, error: "Unauthorized" });
+
+  //prevent user from creating more than 3 accounts
+  const accounts = await Account.find({ user: req.user.id, active: true });
+  if (accounts.length >= 3) {
+    return res.status(400).json({
+      status: "failed",
+      data: null,
+      error: "You can't have more than 3 accounts",
+    });
+  }
   try {
     const newAccount = await Account.create({
       user: req.user.id,
@@ -52,7 +60,6 @@ const createNewAccount = asyncHandler(async (req, res) => {
       .json({ status: "failed", data: null, error: error.message });
   }
 });
-
 
 //@desc Desactivate an account
 //@route PATCH /accounts/desactivate

@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
-import useAuth from "./useAuth";
 
 const useAxios = () => {
-  const { auth, setAuth } = useAuth();
   const [response, setResponse] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -32,7 +30,7 @@ const useAxios = () => {
   };
 
   useEffect(() => {
-    console.log(controller);
+    // console.log(controller);
 
     // useEffect cleanup function
     return () => controller && controller.abort();
