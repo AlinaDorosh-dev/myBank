@@ -1,18 +1,12 @@
 import DashboardDrawer from "../components/DashboardDrawer";
-import { Box, Button, Paper, Typography } from "@mui/material";
+import { Box, Paper, Typography, CircularProgress } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import axiosInstance from "../api/myBankApi";
 import useAxios from "../hooks/useAxios";
 import useAuth from "../hooks/useAuth";
-
-// const accounts = [
-//   "SE83 1756 3624 6902 3431 9402",
-//   "GI56 DTJC EG4P KJRO JCJH 6W7",
-//   "IL81 2655 4983 4710 9697 045",
-// ];
-// const ballances = ["1000", "2000", "3000"];
-
+import NewAccountBtn from "../components/NewAccountBtn";
+import { ACCOUNTS_URL } from "../api/config";
 const AccountManagement = () => {
   const theme = useTheme();
   const [response, error, loading, axiosFetch] = useAxios();
@@ -20,7 +14,7 @@ const AccountManagement = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [accounts, setAccounts] = useState([]);
   const [totalBalance, setTotalBalance] = useState(0);
-  const ACCOUNTS_URL = "/accounts";
+
   useEffect(() => {
     axiosFetch({
       axiosInstance: axiosInstance(auth),
@@ -32,14 +26,9 @@ const AccountManagement = () => {
   useEffect(() => {
     if (response?.data) {
       setAccounts(response.data);
-       setTotalBalance(
-        response.data.map(i=>i.balance).reduce((a,b)=>a+b));
-     }
+    }
   }, [response.data]);
 
-  useEffect(() => {
-    console.log(accounts);
-  }, [accounts]);
   return (
     <Box
       sx={{
@@ -51,7 +40,10 @@ const AccountManagement = () => {
     >
       <DashboardDrawer setSelectedIndex={setSelectedIndex} />
       <Box component='section' sx={{ flexGrow: 1, p: 5 }}>
-        {selectedIndex === 0 && (
+        {loading && (
+          <CircularProgress/>
+        )}
+        {!loading && selectedIndex === 0 && (
           <>
             <Box
               display='flex'
@@ -76,33 +68,49 @@ const AccountManagement = () => {
                   {totalBalance}€
                 </Typography>
               </Paper>
-              <Button variant='outlined'>New Account</Button>
+              <NewAccountBtn
+                accounts={accounts}
+                setTotalBalance={setTotalBalance}
+                setAccounts={setAccounts}
+              />
             </Box>
-
-            <Box sx={{ mt: 12, width: "100%" }}>
-              {accounts.map((account, index) => (
-                <Paper
-                  variant='elevation'
-                  key={index}
-                  elevation={16}
-                  sx={{
-                    m: 3,
-                    p: 2,
-                    width: "90%",
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography variant='subtitle2'>{account.number}</Typography>
-                  <Typography
-                    variant='subtitle2'
-                    color={theme.palette.primary.dark}
+            {!loading && accounts.length && (
+              <Box sx={{ mt: 12, width: "100%" }}>
+                {accounts.map((account, index) => (
+                  <Paper
+                    variant='elevation'
+                    key={index}
+                    elevation={16}
+                    sx={{
+                      m: 3,
+                      p: 2,
+                      width: "90%",
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
                   >
-                    {account.balance}€
-                  </Typography>
-                </Paper>
-              ))}
-            </Box>
+                    <Typography variant='subtitle2'>
+                      {account.number}
+                    </Typography>
+                    <Typography
+                      variant='subtitle2'
+                      color={theme.palette.primary.dark}
+                    >
+                      {account.balance}€
+                    </Typography>
+                  </Paper>
+                ))}
+              </Box>
+            )}
+            {!loading && !accounts.length && (
+              <Typography
+                color={theme.palette.primary.dark}
+                sx={{ mt: 12, width: "100%" }}
+                variant='h5'
+              >
+                You have no account yet. Open one.
+              </Typography>
+            )}
           </>
         )}
       </Box>
