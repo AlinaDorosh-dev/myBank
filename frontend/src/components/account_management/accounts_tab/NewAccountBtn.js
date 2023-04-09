@@ -3,9 +3,9 @@
  * contains the button to create a new account && modal to confirm account creation
  */
 
-import axiosInstance from "../../api/myBankApi";
-import useAxios from "../../hooks/useAxios";
-import useAuth from "../../hooks/useAuth";
+import axiosInstance from "../../../api/myBankApi";
+import useAxios from "../../../hooks/useAxios";
+import useAuth from "../../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import {
   Button,
@@ -17,21 +17,9 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import { NEW_ACCOUNT_URL } from "../../api/config";
+import { NEW_ACCOUNT_URL } from "../../../api/config";
+import { modalStyle } from "../../../styles/modalStyle";
 
-//style for modal
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  borderRadius: 2,
-  boxShadow: 24,
-  p: 4,
-};
 
 const NewAccountBtn = ({ accounts, setTotalBalance, setAccounts }) => {
   //retrieve axios response, error, loading and axiosFetch function from useAxios hook
@@ -46,6 +34,7 @@ const NewAccountBtn = ({ accounts, setTotalBalance, setAccounts }) => {
   //state for alert
   const [openAlert, setOpenAlert] = useState(false);
 
+  //state for avoiding user from creating more than 3 accounts
   const [accountsExcess, setAccountsExcess] = useState(false);
 
   //update accounts and total balance when a new account is created
@@ -119,7 +108,7 @@ const NewAccountBtn = ({ accounts, setTotalBalance, setAccounts }) => {
         }}
       >
         <Fade in={openModal}>
-          <Box sx={style}>
+          <Box sx={modalStyle}>
             {loading && <CircularProgress />}
             {!openAlert && !loading && (
               <>

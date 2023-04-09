@@ -3,8 +3,8 @@ import { Box, CircularProgress } from "@mui/material";
 import { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import useAxios from "../hooks/useAxios";
-import AccountsTab from "../components/account_management/AccountsTab";
-import TransactionsTab from "../components/account_management/TransactionsTab";
+import AccountsTab from "../components/account_management/accounts_tab/AccountsTab";
+import TransactionsTab from "../components/account_management/transactions_tab/TransactionsTab";
 const AccountManagement = () => {
   const theme = useTheme();
   const [response, error, loading, axiosFetch] = useAxios();
@@ -39,7 +39,7 @@ const AccountManagement = () => {
         {!loading && selectedIndex === 0 && (
           <AccountsTab accounts={accounts} setAccounts={setAccounts} />
         )}
-        {!loading && selectedIndex === 1 && <TransactionsTab/>}
+        {!loading && selectedIndex === 1 && <TransactionsTab accounts={accounts}/>}
       </Box>
     </Box>
   );

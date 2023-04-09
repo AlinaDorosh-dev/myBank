@@ -225,4 +225,17 @@ const transactionController = asyncHandler(async (req, res) => {
   }
 });
 
+// const getTransactionsByAccount = asyncHandler(async (req, res) => {
+
+//   const incomingTransactions = await Transaction.find({}).populate({});
+
+//   const transactions = await Transaction.find({
+//     $or: [{ sourceAcc: req.params.id }, { destinationAcc: req.params.id }],
+//   })
+//     .populate("sourceAcc")
+//     .populate("destinationAcc");
+
+//   res.status(200).json({ status: "succeeded", data: transactions, error: null });
+// });
+
 module.exports = transactionController;

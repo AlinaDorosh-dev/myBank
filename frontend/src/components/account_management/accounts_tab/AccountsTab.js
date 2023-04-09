@@ -1,10 +1,10 @@
 import NewAccountBtn from "./NewAccountBtn";
 import { Box, Paper, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
-import axiosInstance from "../../api/myBankApi";
-import useAxios from "../../hooks/useAxios";
-import useAuth from "../../hooks/useAuth";
-import { ACCOUNTS_URL } from "../../api/config";
+import axiosInstance from "../../../api/myBankApi";
+import useAxios from "../../../hooks/useAxios";
+import useAuth from "../../../hooks/useAuth";
+import { ACCOUNTS_URL } from "../../../api/config";
 import { useTheme } from "@mui/material/styles";
 
 const AccountsTab = ({accounts, setAccounts}) => {
