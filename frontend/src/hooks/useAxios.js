@@ -8,7 +8,7 @@ const useAxios = () => {
 
   const axiosFetch = async (configObj) => {
     const { axiosInstance, method, url, requestConfig = {} } = configObj;
-console.log("requestConfig: ", requestConfig);
+    
     try {
       setLoading(true);
 
@@ -19,7 +19,7 @@ console.log("requestConfig: ", requestConfig);
         ...requestConfig,
         signal: controller.signal,
       });
-       console.log(res);
+     // console.log(res);
       setResponse(res.data);
     } catch (err) {
       console.log(err.message);

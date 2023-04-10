@@ -11,6 +11,7 @@ const { ObjectId } = require("mongodb");
 //@route POST /transactions
 //@access Private
 const transactionController = asyncHandler(async (req, res) => {
+  console.log(req.body);
   if (!req.user) {
     return res
       .status(401)

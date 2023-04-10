@@ -22,15 +22,22 @@ const getUsersAccounts = asyncHandler(async (req, res) => {
 });
 
 const getAccountByNumber = asyncHandler(async (req, res) => {
-  console.log(req.body);
-  console.log(req.user);
+  //reformat iban number
+  const reformatIban = `${req.params.number.slice(
+    0,
+    4
+  )} ${req.params.number.slice(4, 8)} ${req.params.number.slice(
+    8,
+    12
+  )} ${req.params.number.slice(12, 16)} ${req.params.number.slice(16, 24)}`;
+
   if (!req.user)
     return res
       .status(401)
       .json({ status: "failed", data: null, error: "Unauthorized" });
   try {
     const account = await Account.findOne({
-      number: req.body.number,
+      number: reformatIban,
       active: true,
     }).populate("user", "firstName lastName");
     if (!account) {
@@ -38,13 +45,20 @@ const getAccountByNumber = asyncHandler(async (req, res) => {
         .status(400)
         .json({ status: "failed", data: null, error: "Account not found" });
     }
-    res.status(200).json({ status: "succeeded", data: account, error: null });
+    res.status(200).json({
+      status: "succeeded",
+      data: {
+        number: account.number,
+        id: account._id,
+        owner: account.user.firstName + " " + account.user.lastName,
+      },
+      error: null,
+    });
   } catch (error) {
     res
       .status(400)
       .json({ status: "failed", data: null, error: error.message });
   }
-  console.log(res)
 });
 
 //@desc Create a new account
@@ -128,4 +142,9 @@ const desactivateAccount = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { getUsersAccounts,getAccountByNumber, createNewAccount, desactivateAccount };
+module.exports = {
+  getUsersAccounts,
+  getAccountByNumber,
+  createNewAccount,
+  desactivateAccount,
+};

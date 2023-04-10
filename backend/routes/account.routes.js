@@ -10,7 +10,7 @@ const {
 const verifyToken = require("../middleware/verifyToken");
 
 router.route("/").get(verifyToken, getUsersAccounts);
-router.route("/validate").get(verifyToken, getAccountByNumber);
+router.route("/validate/:number").get(verifyToken, getAccountByNumber);
 router.route("/new").post(verifyToken, createNewAccount);
 router.route("/desactivate").patch(verifyToken, desactivateAccount);
 module.exports = router;
