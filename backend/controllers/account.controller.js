@@ -21,6 +21,32 @@ const getUsersAccounts = asyncHandler(async (req, res) => {
   }
 });
 
+const getAccountByNumber = asyncHandler(async (req, res) => {
+  console.log(req.body);
+  console.log(req.user);
+  if (!req.user)
+    return res
+      .status(401)
+      .json({ status: "failed", data: null, error: "Unauthorized" });
+  try {
+    const account = await Account.findOne({
+      number: req.body.number,
+      active: true,
+    }).populate("user", "firstName lastName");
+    if (!account) {
+      return res
+        .status(400)
+        .json({ status: "failed", data: null, error: "Account not found" });
+    }
+    res.status(200).json({ status: "succeeded", data: account, error: null });
+  } catch (error) {
+    res
+      .status(400)
+      .json({ status: "failed", data: null, error: error.message });
+  }
+  console.log(res)
+});
+
 //@desc Create a new account
 //@route POST /accounts/new
 //@access Private
@@ -102,4 +128,4 @@ const desactivateAccount = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { getUsersAccounts, createNewAccount, desactivateAccount };
+module.exports = { getUsersAccounts,getAccountByNumber, createNewAccount, desactivateAccount };

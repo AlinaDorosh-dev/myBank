@@ -11,7 +11,7 @@ const TransactionsTab = ({accounts}) => {
   return (
     <>
       <Button variant='outlined' onClick={handleOpenForm}>
-        New Transaction
+        Transfer money
       </Button>
       <NewTransactionForm 
       openForm={openForm} 
