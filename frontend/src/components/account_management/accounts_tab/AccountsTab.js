@@ -7,12 +7,10 @@ import useAuth from "../../../hooks/useAuth";
 import { ACCOUNTS_URL } from "../../../api/config";
 import { useTheme } from "@mui/material/styles";
 
-const AccountsTab = ({accounts, setAccounts}) => {
+const AccountsTab = ({ accounts, setAccounts }) => {
   const { auth } = useAuth();
   const theme = useTheme();
   const [response, error, loading, axiosFetch] = useAxios();
-
- 
 
   //state for total balance
   const [totalBalance, setTotalBalance] = useState(0);
@@ -36,7 +34,7 @@ const AccountsTab = ({accounts, setAccounts}) => {
     }
 
     //display alert when there are no accounts
-    if(response?.data?.length === 0){
+    if (response?.data?.length === 0) {
       setNoAccounts(true);
     }
   }, [response.data]);
@@ -47,24 +45,23 @@ const AccountsTab = ({accounts, setAccounts}) => {
           <Box
             display='flex'
             sx={{
-              mt: 1,
-              justifyContent: "space-between",
+              mt: 20,
+              justifyContent: "space-evenly",
+              width: "100%",
               alignItems: "center",
-              position: "absolute",
-              right: "15px",
-              top: "60px",
+
             }}
           >
             <Paper
               variant='elevation'
               elevation={3}
-              sx={{ mr: 2, p: 1, textAlign: "center" }}
+              sx={{  p: 1, textAlign: "center" }}
             >
               <Typography
                 variant='subtitle2'
                 color={theme.palette.primary.dark}
               >
-                Total ballance:
+                Total balance:
                 {totalBalance}€
               </Typography>
             </Paper>
@@ -75,30 +72,45 @@ const AccountsTab = ({accounts, setAccounts}) => {
             />
           </Box>
           {!loading && accounts.length && (
-            <Box sx={{ mt: 10, width: "100%" }}>
-              {accounts.map((account, index) => (
-                <Paper
-                  variant='elevation'
-                  key={index}
-                  elevation={16}
+            <>
+              <Box sx={{ mt: 3, width: "100%" }}>
+                <Typography
+                  variant='h6'
                   sx={{
-                    m: 3,
-                    p: 2,
-                    width: "90%",
-                    display: "flex",
-                    justifyContent: "space-between",
+                    textAlign: "center",
+                    mb: 1,
                   }}
                 >
-                  <Typography variant='subtitle2'>{account.number}</Typography>
-                  <Typography
-                    variant='subtitle2'
-                    color={theme.palette.primary.dark}
+                  Your accounts:
+                </Typography>
+                {accounts.map((account, index) => (
+                  <Paper
+                    variant='elevation'
+                    key={index}
+                    elevation={16}
+                    sx={{
+                      mb:2,
+                      mr:"auto",
+                      ml:"auto",
+                      p: 1.5,
+                      width: "90%",
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
                   >
-                    {account.balance}€
-                  </Typography>
-                </Paper>
-              ))}
-            </Box>
+                    <Typography variant='subtitle2'>
+                      {account.number}
+                    </Typography>
+                    <Typography
+                      variant='subtitle2'
+                      color={theme.palette.primary.dark}
+                    >
+                      {account.balance}€
+                    </Typography>
+                  </Paper>
+                ))}
+              </Box>
+            </>
           )}
           {noAccounts && (
             <Typography

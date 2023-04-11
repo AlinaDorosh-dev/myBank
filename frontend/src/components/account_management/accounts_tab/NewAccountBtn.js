@@ -91,7 +91,10 @@ const NewAccountBtn = ({ accounts, setTotalBalance, setAccounts }) => {
   };
   return (
     <>
-      <Button variant='outlined' onClick={handleOpenModal}>
+      <Button 
+      variant='outlined'
+      sx={{ width:"170px" }}
+      onClick={handleOpenModal}>
         New Account
       </Button>
       <Modal

@@ -45,7 +45,7 @@ const NewTransactionForm = ({ openForm, handleCloseForm, accounts }) => {
             />
           )}
           {confirmation && (
-            <TransactionConfirmation transaction={transaction} handleCloseForm={handleCloseForm} />
+            <TransactionConfirmation transaction={transaction} handleCloseForm={handleCloseForm} setConfirmation ={setConfirmation}/>
           )}
         </Box>
       </Fade>

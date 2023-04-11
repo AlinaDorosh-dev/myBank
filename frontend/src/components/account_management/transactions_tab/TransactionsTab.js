@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import { useState } from "react";
 import NewTransactionForm from "./NewTransactionForm";
-const TransactionsTab = ({accounts}) => {
+const TransactionsTab = ({ accounts }) => {
   //state for modal
   const [openForm, setOpenForm] = useState(false);
 
@@ -10,15 +10,23 @@ const TransactionsTab = ({accounts}) => {
   const handleCloseForm = () => setOpenForm(false);
   return (
     <>
-      <Button variant='outlined' onClick={handleOpenForm}>
+      <Button
+        variant='outlined'
+        sx={{
+          mt: 20,
+          ml:1
+        }}
+        onClick={handleOpenForm}
+      >
         Transfer money
       </Button>
-      <NewTransactionForm 
-      openForm={openForm} 
-      setOpenForm={setOpenForm}
-      handleOpenForm={handleOpenForm}
-      handleCloseForm={handleCloseForm}
-      accounts={accounts} />
+      <NewTransactionForm
+        openForm={openForm}
+        setOpenForm={setOpenForm}
+        handleOpenForm={handleOpenForm}
+        handleCloseForm={handleCloseForm}
+        accounts={accounts}
+      />
     </>
   );
 };

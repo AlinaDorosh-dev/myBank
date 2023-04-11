@@ -19,13 +19,14 @@ const AccountManagement = () => {
     <Box
       sx={{
         display: "flex",
+        flexDirection: { xs: "column", md: "row" },
         backgroundColor: theme.palette.primary.background,
         height: "100vh",
         width: "100vw",
       }}
     >
       <DashboardDrawer setSelectedIndex={setSelectedIndex} />
-      <Box component='section' sx={{ flexGrow: 1, p: 5 }}>
+      <Box component='section' sx={{ flexGrow: 1 }}>
         {loading && (
           <CircularProgress
             sx={{
@@ -39,7 +40,9 @@ const AccountManagement = () => {
         {!loading && selectedIndex === 0 && (
           <AccountsTab accounts={accounts} setAccounts={setAccounts} />
         )}
-        {!loading && selectedIndex === 1 && <TransactionsTab accounts={accounts}/>}
+        {!loading && selectedIndex === 1 && (
+          <TransactionsTab accounts={accounts} />
+        )}
       </Box>
     </Box>
   );
