@@ -49,9 +49,9 @@ const NewAccountBtn = ({ accounts, setTotalBalance, setAccounts }) => {
       setTotalBalance(accounts.map((i) => i.balance).reduce((a, b) => a + b));
   }, [accounts]);
 
-  useEffect(() => {
-    console.log(error); //log error to console for debugging purposes
-  }, [error]);
+  // useEffect(() => {
+  //   console.log(error); //log error to console for debugging purposes
+  // }, [error]);
 
   //handle modal open and close
   const handleOpenModal = () => setOpenModal(true);

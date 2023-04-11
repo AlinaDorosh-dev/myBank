@@ -4,20 +4,22 @@ import { Fade, Modal, Box, Backdrop, CircularProgress } from "@mui/material";
 import { modalStyle } from "../../../styles/modalStyle";
 import { useState } from "react";
 
+export const initialTransactionState = {
+  sourceAccountId: "",
+  sourceAccountBalance: 0,
+  destinationAccount: "",
+  destinationAccountId: "",
+  beneficiaryName: "",
+  validDestinationAcc: false,
+  amount: "",
+  description: "",
+  errMsg: "",
+};
+
 const NewTransactionForm = ({ openForm, handleCloseForm, accounts }) => {
   const [confirmation, setConfirmation] = useState(false);
 
-  const [transaction, setTransaction] = useState({
-    sourceAccountId: "",
-    sourceAccountBalance: 0,
-    destinationAccount: "",
-    destinationAccountId: "",
-    beneficiaryName: "",
-    validDestinationAcc: false,
-    amount: "",
-    description: "",
-    errMsg: "",
-  });
+  const [transaction, setTransaction] = useState(initialTransactionState);
 
   return (
     <Modal
@@ -45,7 +47,12 @@ const NewTransactionForm = ({ openForm, handleCloseForm, accounts }) => {
             />
           )}
           {confirmation && (
-            <TransactionConfirmation transaction={transaction} handleCloseForm={handleCloseForm} setConfirmation ={setConfirmation}/>
+            <TransactionConfirmation
+              transaction={transaction}
+              setTransaction={setTransaction}
+              handleCloseForm={handleCloseForm}
+              setConfirmation={setConfirmation}
+            />
           )}
         </Box>
       </Fade>

@@ -1,13 +1,22 @@
-import { Typography, Box, Button, CircularProgress,Alert } from "@mui/material";
+import {
+  Typography,
+  Box,
+  Button,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
 import axiosInstance from "../../../api/myBankApi";
 import useAxios from "../../../hooks/useAxios";
 import useAuth from "../../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
+import { initialTransactionState } from "./NewTransactionForm";
+
 const TransactionConfirmation = ({
   transaction,
+  setTransaction,
   handleCloseForm,
-  setConfirmaton,
+  setConfirmation,
 }) => {
   //retrieve auth from useAuth hook
   const { auth } = useAuth();
@@ -17,6 +26,7 @@ const TransactionConfirmation = ({
   const [openAlert, setOpenAlert] = useState(false);
 
   const theme = useTheme();
+
   const handleConfirm = async () => {
     await axiosFetch({
       axiosInstance: axiosInstance(auth),
@@ -33,23 +43,57 @@ const TransactionConfirmation = ({
 
   useEffect(() => {
     console.log("response", response);
-    if (response?.data) {
+    if (response?.data || error) {
       setOpenAlert(true);
     }
-  }, [response]);
+  }, [response, error]);
+
+  const handleCancel = () => {
+    handleCloseForm();
+    setTimeout(() => {
+      setConfirmation(false);
+      setOpenAlert(false);
+      setTransaction(initialTransactionState);
+    }, 200);
+  };
   return (
     <>
       {loading && (
         <CircularProgress
           sx={{
             position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
+            top: "40%",
+            left: "45%",
+            transform: " translate(-50%, -50%)",
           }}
         />
       )}
-      {!loading && (
+      {!loading && openAlert && (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Alert severity={!error ? "success" : "error"}>
+            {!error
+              ? "The money was transferred successfully."
+              : "Transaction failed.Please try again later."}
+          </Alert>
+          <Button
+            variant='outlined'
+            sx={{
+              mt: 3,
+            }}
+            onClick={handleCancel}
+          >
+            Ok
+          </Button>
+        </Box>
+      )}
+      {!loading && !openAlert && (
         <Box mt={1} p={2}>
           <Typography
             sx={{
@@ -94,6 +138,7 @@ const TransactionConfirmation = ({
             </Typography>
             <Typography variant='body2'>{transaction.description}</Typography>
           </Box>
+
           <Box
             sx={{
               display: "flex",
@@ -101,7 +146,7 @@ const TransactionConfirmation = ({
               mt: 2,
             }}
           >
-            <Button variant='outlined' onClick={handleCloseForm}>
+            <Button variant='outlined' onClick={handleCancel}>
               Cancel
             </Button>
             <Button variant='contained' onClick={handleConfirm}>
@@ -110,12 +155,6 @@ const TransactionConfirmation = ({
           </Box>
         </Box>
       )}
-
-{!loading && openAlert  && (
-              <Alert severity={!error ? "success" : "error"}>
-                {!error ? "The money was transferred successfully." : `${error}`}
-              </Alert>
-            )}
     </>
   );
 };

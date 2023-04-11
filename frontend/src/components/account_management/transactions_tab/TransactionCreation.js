@@ -1,7 +1,7 @@
 import axiosInstance from "../../../api/myBankApi";
 import useAxios from "../../../hooks/useAxios";
 import useAuth from "../../../hooks/useAuth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { IBAN_REGEX } from "../../../utils/regex";
 import {
   Button,
@@ -13,7 +13,9 @@ import {
   TextField,
   OutlinedInput,
   InputAdornment,
+  Alert,
 } from "@mui/material";
+
 const TransactionCreation = ({
   accounts,
   handleCloseForm,
@@ -27,6 +29,7 @@ const TransactionCreation = ({
   //retrieve axios response, error, loading and axiosFetch function from useAxios hook
   const [response, error, loading, axiosFetch] = useAxios();
 
+  //function for validate the destination account
   const validateDestinationAcc = async () => {
     await axiosFetch({
       axiosInstance: axiosInstance(auth),
@@ -38,6 +41,18 @@ const TransactionCreation = ({
     });
   };
 
+  //Once the user has entered a valid IBAN, check if the account exists
+  useEffect(() => {
+    const result = IBAN_REGEX.test(
+      transaction.destinationAccount.replace(/ /g, "")
+    );
+    console.log(result);
+    if (result) {
+      validateDestinationAcc();
+    }
+  }, [transaction.destinationAccount]);
+
+  //If the account exists, set the beneficiary name and account id
   useEffect(() => {
     if (response.data) {
       setTransaction({
@@ -49,21 +64,55 @@ const TransactionCreation = ({
     }
   }, [response]);
 
-  useEffect(() => {
-    const result = IBAN_REGEX.test(
-      transaction.destinationAccount.replace(/ /g, "")
-    );
-    console.log(result);
-    if (result) {
-      validateDestinationAcc();
-    }
-  }, [transaction.destinationAccount]);
+  const [instructions, setInstructions] = useState({
+    destinationAccount: "",
+    amount: "",
+    description: "",
+  });
 
+  const ibanTest = () =>
+    IBAN_REGEX.test(transaction.destinationAccount.replace(/ /g, ""));
+
+  //handle proceed to transaction confirmation
   const handleNewTransaction = async () => {
-    //prevent multiple requests
-    if (loading) return;
-    console.log("New transaction created", transaction);
-    setConfirmation(true);
+    switch (true) {
+      case !ibanTest():
+        console.log("ibanTest", ibanTest);
+        setInstructions({
+          ...instructions,
+          destinationAccount: "Please enter a valid destination IBAN",
+        });
+        break;
+      case ibanTest && !transaction.validDestinationAcc:
+        setInstructions({
+          ...instructions,
+          destinationAccount:
+            "Destination account not found. Please check the IBAN",
+        });
+        break;
+      case transaction.amount > transaction.sourceAccountBalance:
+        setInstructions({
+          ...instructions,
+          amount: "Insufficient funds in source account",
+        });
+        break;
+      case transaction.amount <= 0:
+        setInstructions({
+          ...instructions,
+          amount: "Please enter a valid amount",
+        });
+        break;
+      case transaction.description?.length < 5 ||
+        transaction.description?.length > 100:
+        setInstructions({
+          ...instructions,
+          description: "Description must be between 5 and 100 characters",
+        });
+        break;
+      default:
+        setConfirmation(true);
+        break;
+    }
   };
 
   const handleSelectChange = (e) => {
@@ -84,6 +133,16 @@ const TransactionCreation = ({
       >
         Create new transaction:
       </Typography>
+      {(instructions.destinationAccount ||
+        instructions.amount ||
+        instructions.description) && (
+        <Alert severity='warning'>
+          {Object.keys(instructions).map((key) => {
+            return <Typography key={key}>{instructions[key]}</Typography>;
+          })}
+        </Alert>
+      )}
+
       <Box
         mt={5}
         component='form'

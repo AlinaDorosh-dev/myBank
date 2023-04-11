@@ -7,6 +7,7 @@ import {
   Link,
   InputAdornment,
   IconButton,
+  Alert,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import useAuth from "../../hooks/useAuth";
@@ -123,7 +124,29 @@ const LoginForm = () => {
         <Typography variant='h4' align='center' sx={{ display: "block" }}>
           Login
         </Typography>
-
+        {error === "Request failed with status code 401" ? (
+          <Alert
+            sx={{
+              mt: 1,
+              textAlign: "justify",
+            }}
+            severity='error'
+          >
+            Unauthorized. Wrong email or password
+          </Alert>
+        ) : (
+          error && (
+            <Alert
+              sx={{
+                mt: 1,
+                textAlign: "left",
+              }}
+              severity='error'
+            >
+              Connection error. Please reload the app
+            </Alert>
+          )
+        )}
         <TextField
           required
           id='outlined'
