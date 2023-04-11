@@ -1,6 +1,7 @@
 import { Button } from "@mui/material";
 import { useState } from "react";
 import NewTransactionForm from "./NewTransactionForm";
+
 const TransactionsTab = ({ accounts }) => {
   //state for modal
   const [openForm, setOpenForm] = useState(false);
@@ -13,8 +14,11 @@ const TransactionsTab = ({ accounts }) => {
       <Button
         variant='outlined'
         sx={{
-          mt: 20,
-          ml:1
+          mt: { xs: 20, sm: 10 },
+          ml: { xs: 1 },
+          position:{sm: "absolute"},
+          top:{sm: 10},
+          right:{sm: 15},
         }}
         onClick={handleOpenForm}
       >

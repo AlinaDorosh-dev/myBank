@@ -39,23 +39,29 @@ const AccountsTab = ({ accounts, setAccounts }) => {
     }
   }, [response.data]);
   return (
-    <div>
+    <Box
+      sx={{
+        width: { xs: "100%", sm: "75%", md: "85%" },
+        ml: { xs: 0, sm: 25, md: 15 },
+      }}
+    >
       {!loading && (
         <>
           <Box
             display='flex'
             sx={{
-              mt: 20,
-              justifyContent: "space-evenly",
+              mt: { xs: 20, sm: 8 },
+              justifyContent: { xs: "space-evenly", sm: "space-between" },
               width: "100%",
               alignItems: "center",
-
+              mx: "auto",
+              p:{sm:3}
             }}
           >
             <Paper
               variant='elevation'
               elevation={3}
-              sx={{  p: 1, textAlign: "center" }}
+              sx={{ p: 1, textAlign: "center" }}
             >
               <Typography
                 variant='subtitle2'
@@ -89,9 +95,9 @@ const AccountsTab = ({ accounts, setAccounts }) => {
                     key={index}
                     elevation={16}
                     sx={{
-                      mb:2,
-                      mr:"auto",
-                      ml:"auto",
+                      mb: 2,
+                      mr: "auto",
+                      ml: "auto",
                       p: 1.5,
                       width: "90%",
                       display: "flex",
@@ -123,7 +129,7 @@ const AccountsTab = ({ accounts, setAccounts }) => {
           )}
         </>
       )}
-    </div>
+    </Box>
   );
 };
 

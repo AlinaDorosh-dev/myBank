@@ -8,7 +8,6 @@ import {
   Box,
   Toolbar,
   Badge,
-  
 } from "@mui/material";
 import { AccountBalance, EuroSymbol, Person, Mail } from "@mui/icons-material";
 
@@ -22,7 +21,8 @@ const DashboardDrawer = ({ setSelectedIndex }) => {
         width: drawerWidth,
         flexShrink: 0,
         [`& .MuiDrawer-paper`]: {
-          width: { sm: "20%", md: "15%" },
+          width: { sm: "25%", md: "15%" },
+          height: { sm: "100vh" },
           boxSizing: "border-box",
           zIndex: 0,
         },
@@ -33,7 +33,7 @@ const DashboardDrawer = ({ setSelectedIndex }) => {
         <List
           sx={{
             display: "flex",
-            flexDirection: "row",
+            flexDirection: { xs: "row", sm: "column" },
           }}
         >
           {["Accounts", "Transfers", "Profile", "Messages"].map(
@@ -46,10 +46,10 @@ const DashboardDrawer = ({ setSelectedIndex }) => {
                 <ListItemButton
                   sx={{
                     display: "flex",
-                    flexDirection: "column",
+                    flexDirection: { xs: "column", sm: "row" },
                     alignItems: "center",
                     justifyContent: "center",
-                    textAlign: "center",
+                    textAlign: {xs:"center", sm:"left"},
                     mr: -3,
                     ml: -2,
                   }}

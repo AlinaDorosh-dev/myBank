@@ -16,14 +16,10 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import { useEffect } from "react";
 
 const drawerWidth = 240;
-const navItems = [
-  { text: "Home", route: "/" },
-  { text: "About", route: "/about" },
-  { text: "Contact", route: "/contact" },
-  { text: "Login", route: "/login" },
-];
 
 function Header(props) {
   const theme = useTheme();
@@ -31,8 +27,31 @@ function Header(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
+  const { auth, setAuth } = useAuth();
+
+  useEffect(() => {
+    console.log(auth);
+  }, [auth]);
+
+  const navItems = [
+    { text: "Home", route: "/" },
+    { text: "About", route: "/about" },
+    { text: "Contact", route: "/contact" },
+    { text: !auth ? "Login" : "Logout", route: !auth ? "/login" : "/" },
+  ];
+
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
+  };
+
+  const handleClick = (item) => {
+    console.log(item.text);
+    if (item.text === "Logout") {
+      setAuth("");
+      navigate(item.route);
+    } else {
+      navigate(item.route);
+    }
   };
 
   const drawer = (
@@ -46,11 +65,7 @@ function Header(props) {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem
-            key={item.text}
-            disablePadding
-            onClick={() => navigate(item.route)}
-          >
+          <ListItem key={item.text} disablePadding onClick={() => handleClick(item)}>
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText primary={item.text} />
             </ListItemButton>
@@ -85,7 +100,11 @@ function Header(props) {
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
-              <Button onClick={() => navigate(item.route)} key={item.text} variant= "button">
+              <Button
+                onClick={() => handleClick(item)}
+                key={item.text}
+                variant='button'
+              >
                 {item.text}
               </Button>
             ))}
