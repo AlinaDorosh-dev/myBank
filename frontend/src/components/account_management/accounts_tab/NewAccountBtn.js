@@ -20,7 +20,6 @@ import {
 import { NEW_ACCOUNT_URL } from "../../../api/config";
 import { modalStyle } from "../../../styles/modalStyle";
 
-
 const NewAccountBtn = ({ accounts, setTotalBalance, setAccounts }) => {
   //retrieve axios response, error, loading and axiosFetch function from useAxios hook
   const [response, error, loading, axiosFetch] = useAxios();
@@ -45,8 +44,13 @@ const NewAccountBtn = ({ accounts, setTotalBalance, setAccounts }) => {
   }, [response.data]);
 
   useEffect(() => {
-    if (accounts.length)
-      setTotalBalance(accounts.map((i) => i.balance).reduce((a, b) => a + b));
+    if (accounts.length) {
+      const total = accounts
+        .map((i) => i.balance)
+        .reduce((a, b) => a + b)
+        .toFixed(2);
+      setTotalBalance(total);
+    }
   }, [accounts]);
 
   // useEffect(() => {
@@ -91,10 +95,11 @@ const NewAccountBtn = ({ accounts, setTotalBalance, setAccounts }) => {
   };
   return (
     <>
-      <Button 
-      variant='outlined'
-      sx={{ width:"170px" }}
-      onClick={handleOpenModal}>
+      <Button
+        variant='outlined'
+        sx={{ width: "170px" }}
+        onClick={handleOpenModal}
+      >
         New Account
       </Button>
       <Modal

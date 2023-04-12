@@ -226,17 +226,47 @@ const transactionController = asyncHandler(async (req, res) => {
   }
 });
 
-// const getTransactionsByAccount = asyncHandler(async (req, res) => {
+const getTransactionsByUser = asyncHandler(async (req, res) => {
+  if (!req.user)
+    return res
+      .status(401)
+      .json({ status: "failed", data: null, error: "Unauthorized" });
 
-//   const incomingTransactions = await Transaction.find({}).populate({});
+  try {
+    //find all active accounts from user
+    const accounts = await Account.find({ user: req.user.id, active: true });
+    //find incoming transactions from user
+    const incomingTransactions = await Transaction.find({
+      destinationAcc: { $in: accounts },
+      status: "completed",
+    })
+      .populate({
+        path: "sourceAcc",
+        select: "number user",
+        populate: { path: "user", select: "firstName lastName" },
+      })
+      .exec();
 
-//   const transactions = await Transaction.find({
-//     $or: [{ sourceAcc: req.params.id }, { destinationAcc: req.params.id }],
-//   })
-//     .populate("sourceAcc")
-//     .populate("destinationAcc");
+    //find outgoing transactions from user
+    const outgoingTransactions = await Transaction.find({
+      sourceAcc: { $in: accounts },
+      status: "completed",
+    }).populate({
+      path: "destinationAcc",
+      select: "number user",
+      populate: { path: "user", select: "firstName lastName" },
+    }).exec();
 
-//   res.status(200).json({ status: "succeeded", data: transactions, error: null });
-// });
+    res.status(200).json({
+      status: "succeeded",
+      data: { incomingTransactions, outgoingTransactions },
+      error: null,
+    });
+  } catch (error) {
+    res
+      .status(400)
+      .json({ status: "failed", data: null, error: error.message });
+  }
+});
 
-module.exports = transactionController;
+module.exports = { transactionController, getTransactionsByUser };
