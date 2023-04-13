@@ -10,8 +10,23 @@ import {
   Badge,
 } from "@mui/material";
 import { AccountBalance, EuroSymbol, Person, Mail } from "@mui/icons-material";
-
+import { NotificationContext } from "../../context/NotificationProvider";
+import { useContext, useEffect, useState } from "react";
 const DashboardDrawer = ({ setSelectedIndex }) => {
+  const { notifications } = useContext(NotificationContext);
+
+  const [unreadMessages, setUnreadMessages] = useState(0);
+
+  useEffect(() => {
+    if (notifications?.length === 0) return;
+    if (notifications?.length > 0) {
+      const unreadMsgs = notifications.filter((notification) => {
+        return !notification.read;
+      });
+      setUnreadMessages(unreadMsgs.length);
+    }
+  }, [notifications]);
+
   const drawerWidth = 170;
   return (
     <Drawer
@@ -36,7 +51,7 @@ const DashboardDrawer = ({ setSelectedIndex }) => {
             flexDirection: { xs: "row", sm: "column" },
           }}
         >
-          {["Accounts", "Transfers", "Profile", "Messages"].map(
+          {["Accounts", "Transfers", "Messages", "Profile"].map(
             (text, index) => (
               <ListItem
                 key={text}
@@ -49,7 +64,7 @@ const DashboardDrawer = ({ setSelectedIndex }) => {
                     flexDirection: { xs: "column", sm: "row" },
                     alignItems: "center",
                     justifyContent: "center",
-                    textAlign: {xs:"center", sm:"left"},
+                    textAlign: { xs: "center", sm: "left" },
                     mr: -3,
                     ml: -2,
                   }}
@@ -61,11 +76,11 @@ const DashboardDrawer = ({ setSelectedIndex }) => {
                     ) : index === 1 ? (
                       <EuroSymbol />
                     ) : index === 2 ? (
-                      <Person />
-                    ) : (
-                      <Badge badgeContent={4} color='primary'>
+                      <Badge badgeContent={unreadMessages} color='primary'>
                         <Mail color='action' />
                       </Badge>
+                    ) : (
+                      <Person />
                     )}
                   </ListItemIcon>
                   <ListItemText primary={text} sx={{ fontSize: "0.6rem" }} />

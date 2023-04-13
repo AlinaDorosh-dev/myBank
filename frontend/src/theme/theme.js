@@ -1,27 +1,24 @@
-import { cyan, grey } from "@mui/material/colors";
+import { cyan, grey, yellow } from "@mui/material/colors";
 import { createTheme } from "@mui/material";
 
 const theme = createTheme({
   palette: {
-   
     primary: {
       main: cyan[700],
       background: cyan[50],
       dark: cyan[900],
       contrastText: "#ffffff",
     },
-
-    // secondary: {
-    //   main: "#ffffff",
-    // },
-    // error: {},
-    // warning: {},
-    // info: {},
-    // success: {},
-    //
-    // },
+    notification: {
+      main: yellow[800],
+    },
+    tableRow: {
+      even: grey[200],
+    },
+    tableHeader:{
+      main: cyan[100],
+    }
   },
-
   typography: {
     fontFamily: "Poppins, sans-serif",
     color: grey[800],
@@ -45,8 +42,6 @@ const theme = createTheme({
     button: {
       color: "#ffffff",
     },
-
-   
   },
 });
 

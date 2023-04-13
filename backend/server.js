@@ -35,6 +35,7 @@ app.use(logger);
 app.use("/auth", require("./routes/auth.routes"));
 app.use("/accounts", require("./routes/account.routes"));
 app.use("/transactions", require("./routes/transaction.routes"));
+app.use("/notifications", require("./routes/notification.routes"));
 
 app.use(errorHandler);
 db.once("open", () => {

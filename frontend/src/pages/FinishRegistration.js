@@ -3,7 +3,7 @@ import { useTheme } from "@mui/material/styles";
 import RegisterForm from "../components/forms/RegisterForm";
 import RegistrationProvider from "../context/RegistrationProvider";
 
-const FinishRegistraton = () => {
+const FinishRegistration = () => {
   const theme = useTheme();
   return (
     <Box
@@ -20,4 +20,4 @@ const FinishRegistraton = () => {
   );
 };
 
-export default FinishRegistraton;
+export default FinishRegistration;

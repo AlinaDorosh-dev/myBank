@@ -86,11 +86,9 @@ const TransactionsHistory = () => {
           };
         }
       );
-      console.log(incomingRows);
-      console.log(outgoingRows);
       rows = incomingRows
         .concat(outgoingRows)
-        .sort((a, b) => (b.date > a.date ? 1 : a.date > b.date ? -1 : 0));
+        .sort((a, b) => (b.date > a.date ? -1 : a.date > b.date ? 1 : 0));
       setRows(rows);
       setVisibleRows(rows.slice(0, 5));
     }
@@ -128,10 +126,7 @@ const TransactionsHistory = () => {
             justifyContent: "space-between",
           }}
         >
-          <Button 
-          onClick={handlePreviousPage}
-          disabled={page === 0}
-          >
+          <Button onClick={handlePreviousPage} disabled={page === 0}>
             <NavigateBefore fontSize='large' sx={{ color: "white" }} />
           </Button>
           <Typography
@@ -144,8 +139,9 @@ const TransactionsHistory = () => {
           >
             TRANSACTIONS HISTORY
           </Typography>
-          <Button onClick={handleNextPage}
-          disabled={page === rows.length / 5 - 1}
+          <Button
+            onClick={handleNextPage}
+            disabled={page === rows.length / 5 - 1}
           >
             <NavigateNext fontSize='large' sx={{ color: "white" }} />
           </Button>
@@ -157,17 +153,33 @@ const TransactionsHistory = () => {
             backgroundColor: "white",
           }}
         >
-          <Table>
-            <TableHead>
+          <Table
+            sx={{
+              "& .MuiTableRow-root:nth-child(even)": {
+                bgcolor: theme.palette.tableRow.even,
+              },
+            
+            }}
+          >
+            <TableHead
+            sx={{
+              backgroundColor: theme.palette.primary.dark,
+              
+            }}
+            >
               <TableRow>
                 {COLUMNS.map((column) => (
-                  <TableCell key={column.field} align='center'>
+                  <TableCell key={column.field} align='center'
+                  sx={{
+                    color: "white",
+                  }}
+                  >
                     {column.headerName}
                   </TableCell>
                 ))}
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody sx={{}}>
               {visibleRows.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell align='center'>{row.date}</TableCell>

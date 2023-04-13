@@ -9,8 +9,9 @@ import Layout from "./components/Layout";
 import Unauthorized from "./pages/Unauthorized";
 import RequireAuth from "./auth/RequireAuth";
 import { AuthProvider } from "./context/AuthProvider";
+import NotificationProvider from "./context/NotificationProvider";
 import AccountManagement from "./pages/AccountManagement";
-import FinishRegistraton from "./pages/FinishRegistraton";
+import FinishRegistration from "./pages/FinishRegistration";
 function App() {
   return (
     <AuthProvider>
@@ -18,8 +19,7 @@ function App() {
         <Routes>
           {/* public routes */}
           <Route path='/' element={<Layout />}>
-            {/* <Route path='/' element={<AccountManagement/>} /> */}
-            <Route path='/' element={<HomePage />} />
+            <Route index element={<HomePage />} />
             <Route path='login' element={<Login />} />
             <Route path='about' element={<About />} />
             <Route path='contact' element={<Contact />} />
@@ -34,11 +34,15 @@ function App() {
             >
               <Route
                 path='finish-registration'
-                element={<FinishRegistraton />}
+                element={<FinishRegistration />}
               />
               <Route
                 path='account-management'
-                element={<AccountManagement />}
+                element={
+                  <NotificationProvider>
+                    <AccountManagement />
+                  </NotificationProvider>
+                }
               />
             </Route>
             {/* <Route element={<RequireAuth allowedRole='user' />}> */}
