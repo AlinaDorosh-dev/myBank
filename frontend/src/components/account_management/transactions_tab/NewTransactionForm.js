@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This component is the parent component for the transaction creation and confirmation components
+*/
+
 import TransactionCreation from "./TransactionCreation";
 import TransactionConfirmation from "./TransactionConfirmation";
 import { Fade, Modal, Box, Backdrop, CircularProgress } from "@mui/material";
@@ -17,8 +21,11 @@ export const initialTransactionState = {
 };
 
 const NewTransactionForm = ({ openForm, handleCloseForm, accounts }) => {
+
+  //state for confirmation modal
   const [confirmation, setConfirmation] = useState(false);
 
+  //state for transaction
   const [transaction, setTransaction] = useState(initialTransactionState);
 
   return (

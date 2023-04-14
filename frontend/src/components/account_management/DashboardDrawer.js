@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the DashboardDrawer component used to switch between the different tabs in the AccountManagement component.
+ */
 import {
   Drawer,
   List,
@@ -13,10 +16,14 @@ import { AccountBalance, EuroSymbol, Person, Mail } from "@mui/icons-material";
 import { NotificationContext } from "../../context/NotificationProvider";
 import { useContext, useEffect, useState } from "react";
 const DashboardDrawer = ({ setSelectedIndex }) => {
+
+  //retrieve notifications state
   const { notifications } = useContext(NotificationContext);
 
+  //state for unread messages
   const [unreadMessages, setUnreadMessages] = useState(0);
 
+  //set unread messages state when notifications state changes
   useEffect(() => {
     if (notifications?.length === 0) return;
     if (notifications?.length > 0) {

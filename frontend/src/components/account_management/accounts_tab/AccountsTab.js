@@ -1,3 +1,8 @@
+/**
+ * @fileoverview AccountsTab component renders the accounts tab in the account management page
+ * 
+ */
+
 import NewAccountBtn from "./NewAccountBtn";
 import { Box, Paper, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
@@ -8,10 +13,14 @@ import { ACCOUNTS_URL } from "../../../api/config";
 import { useTheme } from "@mui/material/styles";
 
 const AccountsTab = ({ accounts, setAccounts }) => {
+  //retrieve auth state
   const { auth } = useAuth();
-  const theme = useTheme();
+
+  //retrieve response, error, loading and axiosFetch from useAxios custom hook
   const [response, error, loading, axiosFetch] = useAxios();
 
+  const theme = useTheme();
+  
   //state for total balance
   const [totalBalance, setTotalBalance] = useState(0);
 

@@ -26,6 +26,12 @@ const RegistrationProvider = ({ children }) => {
     attachment: "",
   });
 
+ 
+  const [data, error, loading, axiosFetch] = useAxios();
+  const { auth } = useAuth();
+  const decoded = jwt_decode(auth);
+  const userId = decoded?.UserInfo?.id;
+
   const {
     firstName,
     lastName,
@@ -37,18 +43,13 @@ const RegistrationProvider = ({ children }) => {
     documentType,
     documentNumber,
   } = userData;
-  const USER_URL = `/auth/user/${userId}`;
-  const [data, error, loading, axiosFetch] = useAxios();
-  const { auth } = useAuth();
-  const decoded = jwt_decode(auth);
-  const userId = decoded?.UserInfo?.id;
 
   const handleSubmit = () => {
     try {
       axiosFetch({
         axiosInstance: axiosInstance(auth),
         method: "PATCH",
-        url: USER_URL,
+        url: `/auth/user/${userId}`,
         requestConfig: {
           firstName,
           lastName,

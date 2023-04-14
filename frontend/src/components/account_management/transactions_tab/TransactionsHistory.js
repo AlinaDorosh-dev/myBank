@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the TransactionsHistory component. This component is used to display users transactions history 
+ */
 import {
   Typography,
   Box,
@@ -21,10 +24,17 @@ import { useTheme } from "@mui/material/styles";
 
 const TransactionsHistory = () => {
   const theme = useTheme();
+
+  //retrieve auth state
   const { auth } = useAuth();
+
+  //retrieve response, error, loading and axiosFetch from useAxios custom hook
+  const [response, error, loading, axiosFetch] = useAxios();
+
   const [transactions, setTransactions] = useState([]);
   const [noTransactions, setNoTransactions] = useState(false);
-  const [response, error, loading, axiosFetch] = useAxios();
+ 
+  //states for pagination
   const [page, setPage] = useState(0);
   const [rows, setRows] = useState([]);
   const [visibleRows, setVisibleRows] = useState([]);
@@ -37,6 +47,7 @@ const TransactionsHistory = () => {
     { field: "type", headerName: "Type" },
   ];
 
+  //fetch transactions on component mount
   useEffect(() => {
     axiosFetch({
       axiosInstance: axiosInstance(auth),
@@ -45,6 +56,7 @@ const TransactionsHistory = () => {
     });
   }, []);
 
+  //set transactions state when response is received
   useEffect(() => {
     if (response?.data) {
       setTransactions(response.data);
@@ -55,6 +67,7 @@ const TransactionsHistory = () => {
     }
   }, [response.data]);
 
+  //reformat transactions data for table
   useEffect(() => {
     let rows = [];
 
@@ -94,6 +107,7 @@ const TransactionsHistory = () => {
     }
   }, [transactions?.incomingTransactions, transactions?.outgoingTransactions]);
 
+  //handle pagination
   const handleNextPage = () => {
     if (page < rows.length / 5 - 1) {
       setPage(page + 1);

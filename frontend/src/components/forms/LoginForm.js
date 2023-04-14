@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Login Form Component
+ */
+
 import {
   Box,
   Typography,
@@ -8,94 +12,71 @@ import {
   InputAdornment,
   IconButton,
   Alert,
+  FormControl,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import useAuth from "../../hooks/useAuth";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/myBankApi";
-
 import useAxios from "../../hooks/useAxios";
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { EMAIL_REGEX } from "../../utils/regex";
 
 const LoginForm = () => {
-  const LOGIN_URL = "/auth/login";
+  //retrieve response, error, loading and axiosFetch from useAxios custom hook
   const [data, error, loading, axiosFetch] = useAxios();
+
+  //retrieve auth state and setAuth function from useAuth custom hook
   const { auth, setAuth } = useAuth();
 
-  const location = useLocation();
-  const { from } = location.state?.from?.pathname || "/";
   const navigate = useNavigate();
 
-  const errRef = useRef();
-
+  //inputs states
   const [email, setEmail] = useState("");
+  const [validEmail, setValidEmail] = useState(false);
   const [pwd, setPwd] = useState("");
-  const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [emailFocus, setEmailFocus] = useState(false);
 
+  //password visibility state
   const [showPassword, setShowPassword] = useState(false);
-  useEffect(() => {
-    if (data?.accessToken) {
-      setAuth(data.accessToken);
-    }
-  }, [data.accessToken]);
 
-  useEffect(() => {
-    auth && navigate("/dashboard");
-  }, [auth]);
-
+  //function for reset login state after submit
   const resetLoginState = () => {
     setEmail("");
-    setErrMsg("");
-    setSuccess(false);
     setPwd("");
     setShowPassword(false);
   };
 
+  //set auth state if user is logged in
   useEffect(() => {
-    setErrMsg("");
-  }, [email, pwd]);
+    if (data?.accessToken) {
+      setAuth(data.accessToken);
+    }
+    resetLoginState();
+  }, [data.accessToken]);
+
+  //redirect to dashboard if user is logged in
+  useEffect(() => {
+    auth && navigate("/dashboard");
+  }, [auth]);
+
+  //email validation
+  useEffect(() => {
+    setValidEmail(EMAIL_REGEX.test(email));
+  }, [email]);
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const handleLogin = async () => {
-    try {
-      await axiosFetch({
-        axiosInstance: axiosInstance(),
-        method: "POST",
-        url: LOGIN_URL,
-        requestConfig: {
-          email,
-          password: pwd,
-        },
-      });
-
-      //  data ? navigate("/dashboard") : navigate("/unauthorized");
-
-      //   console.log("data", data);
-      //   const accessToken = data?.accessToken;
-      //   console.log("accessToken", accessToken);
-      //   setAuth(accessToken);
-      //   console.log("auth", auth);
-      // navigate("/dashboard");
-      //   const roles = response?.data?.roles;
-      //   setAuth({ user, pwd, roles, accessToken });
-      // setAuth({ accessToken });
-      //   resetUser();
-      //   setPwd("");
-      //navigate(from, { replace: true });
-    } catch (err) {
-      if (!err?.response) {
-        setErrMsg("No Server Response");
-      } else if (err.response?.status === 400) {
-        setErrMsg("Wrong email or password");
-      } else if (err.response?.status === 401) {
-        setErrMsg("Unauthorized");
-      } else {
-        setErrMsg("Login Failed");
-      }
-      // errRef.current.focus();
-    }
+    await axiosFetch({
+      axiosInstance: axiosInstance(),
+      method: "POST",
+      url: "/auth/login",
+      requestConfig: {
+        email,
+        password: pwd,
+      },
+    });
   };
 
   return (
@@ -147,40 +128,51 @@ const LoginForm = () => {
             </Alert>
           )
         )}
-        <TextField
-          required
-          id='outlined'
-          label='Email'
-          type='email'
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-          autoFocus
-        />
-        <TextField
-          id='filled-password-input'
-          label='Password'
-          type={showPassword ? "text" : "password"}
-          onChange={(e) => setPwd(e.target.value)}
-          required
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position='end'>
-                <IconButton
-                  aria-label='toggle password visibility'
-                  onClick={handleClickShowPassword}
-                >
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-
+        <FormControl>
+          <TextField
+            required
+            id='outlined'
+            label='Email'
+            type='email'
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            autoFocus
+            onFocus={() => setEmailFocus(true)}
+            onBlur={() => setEmailFocus(false)}
+            helperText={
+              email && emailFocus && !validEmail
+                ? "Please enter valid email"
+                : ""
+            }
+          />
+        </FormControl>
+        <FormControl>
+          <TextField
+            id='filled-password-input'
+            label='Password'
+            type={showPassword ? "text" : "password"}
+            onChange={(e) => setPwd(e.target.value)}
+            required
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position='end'>
+                  <IconButton
+                    aria-label='toggle password visibility'
+                    onClick={handleClickShowPassword}
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </FormControl>
         <Button
           variant='contained'
           sx={{ mt: 3, width: "100%" }}
           onClick={() => handleLogin()}
+          disabled={!email || !validEmail || !pwd}
         >
           Sign in
         </Button>

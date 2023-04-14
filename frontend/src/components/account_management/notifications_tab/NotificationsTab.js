@@ -1,3 +1,8 @@
+/**
+ * @fileoverview This file contains the NotificationsTab component.
+ *  This component is used to display users notifications about recent transactions
+ */
+
 import {
   Typography,
   Box,
@@ -29,8 +34,11 @@ import { NotificationContext } from "../../../context/NotificationProvider";
 
 const NotificationsTab = () => {
   const theme = useTheme();
+
+  //retrieve auth state
   const { auth } = useAuth();
 
+  //retrieve notifications state
   const {
     notifications,
     setNotifications,
@@ -38,7 +46,10 @@ const NotificationsTab = () => {
     setNoNotifications,
   } = useContext(NotificationContext);
 
+   //retrieve response, error, loading and axiosFetch from useAxios custom hook
   const [response, error, loading, axiosFetch] = useAxios();
+
+  //states for pagination
   const [page, setPage] = useState(0);
   const [rows, setRows] = useState([]);
   const [visibleRows, setVisibleRows] = useState([]);
@@ -49,6 +60,7 @@ const NotificationsTab = () => {
     { field: "read", headerName: "Read" },
   ];
 
+  //Reformat notifications data to be displayed in table
   useEffect(() => {
     let rows = [];
     if (notifications?.length === 0) return;
@@ -67,6 +79,7 @@ const NotificationsTab = () => {
     }
   }, [notifications]);
 
+  //functions for handling pagination
   const handleNextPage = () => {
     if (page < rows.length / 5 - 1) {
       setPage(page + 1);
@@ -81,6 +94,7 @@ const NotificationsTab = () => {
     }
   };
 
+  //function for handling marking notifications as read
   const handleMarkAsRead = (id) => {
     axiosFetch({
       axiosInstance: axiosInstance(auth),
@@ -149,10 +163,12 @@ const NotificationsTab = () => {
             <TableHead>
               <TableRow sx={{ backgroundColor: theme.palette.primary.dark }}>
                 {COLUMNS.map((column) => (
-                  <TableCell key={column.field} align='center'
-                  sx={{
-                    color: "white",
-                  }}
+                  <TableCell
+                    key={column.field}
+                    align='center'
+                    sx={{
+                      color: "white",
+                    }}
                   >
                     {column.headerName}
                   </TableCell>

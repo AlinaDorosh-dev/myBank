@@ -21,6 +21,7 @@ import { NEW_ACCOUNT_URL } from "../../../api/config";
 import { modalStyle } from "../../../styles/modalStyle";
 
 const NewAccountBtn = ({ accounts, setTotalBalance, setAccounts }) => {
+
   //retrieve axios response, error, loading and axiosFetch function from useAxios hook
   const [response, error, loading, axiosFetch] = useAxios();
 
@@ -53,9 +54,6 @@ const NewAccountBtn = ({ accounts, setTotalBalance, setAccounts }) => {
     }
   }, [accounts]);
 
-  // useEffect(() => {
-  //   console.log(error); //log error to console for debugging purposes
-  // }, [error]);
 
   //handle modal open and close
   const handleOpenModal = () => setOpenModal(true);
@@ -63,7 +61,8 @@ const NewAccountBtn = ({ accounts, setTotalBalance, setAccounts }) => {
 
   //handle new account creation
   const handleNewAccount = async () => {
-    //prevent multiple requests
+
+        //prevent multiple requests
     if (loading) return;
 
     //prevent user from creating more than 3 accounts
@@ -78,12 +77,14 @@ const NewAccountBtn = ({ accounts, setTotalBalance, setAccounts }) => {
       }, 3000);
       return;
     }
+
     //send request to create new account
     await axiosFetch({
       axiosInstance: axiosInstance(auth),
       method: "POST",
       url: NEW_ACCOUNT_URL,
     });
+    
     //show alert
     setOpenAlert(true);
     setTimeout(() => {

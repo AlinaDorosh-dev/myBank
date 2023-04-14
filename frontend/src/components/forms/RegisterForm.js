@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Multi-step form for complete registration before using the app.
+ */
 import {
   Box,
   Paper,

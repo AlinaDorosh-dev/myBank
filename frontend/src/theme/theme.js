@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Theme for the application
+ */
 import { cyan, grey, yellow } from "@mui/material/colors";
 import { createTheme } from "@mui/material";
 
@@ -15,9 +18,7 @@ const theme = createTheme({
     tableRow: {
       even: grey[200],
     },
-    tableHeader:{
-      main: cyan[100],
-    }
+  
   },
   typography: {
     fontFamily: "Poppins, sans-serif",

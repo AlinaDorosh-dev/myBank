@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains the stepper component for multistep registration form.
+ */
+
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -6,6 +10,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { RegistrationContext } from "../../context/RegistrationProvider";
 import { useContext } from "react";
+
 export default function HorizontalLinearStepper() {
   const {
     activeStep,

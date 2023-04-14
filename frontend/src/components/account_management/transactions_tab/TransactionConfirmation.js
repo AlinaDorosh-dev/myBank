@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the TransactionConfirmation component. This component is used to confirm the transaction before sending it to the server.
+ */
 import {
   Typography,
   Box,
@@ -23,10 +26,13 @@ const TransactionConfirmation = ({
 
   //retrieve axios response, error, loading and axiosFetch function from useAxios hook
   const [response, error, loading, axiosFetch] = useAxios();
+
+  //state for alert
   const [openAlert, setOpenAlert] = useState(false);
 
   const theme = useTheme();
 
+  //send transaction to server
   const handleConfirm = async () => {
     await axiosFetch({
       axiosInstance: axiosInstance(auth),
@@ -41,6 +47,7 @@ const TransactionConfirmation = ({
     });
   };
 
+  //update alert state when response or error changes
   useEffect(() => {
     console.log("response", response);
     if (response?.data || error) {
@@ -48,6 +55,7 @@ const TransactionConfirmation = ({
     }
   }, [response, error]);
 
+  //handle canceling transaction
   const handleCancel = () => {
     handleCloseForm();
     setTimeout(() => {

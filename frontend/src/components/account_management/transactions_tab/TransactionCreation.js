@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the TransactionCreation component. This component is used to create a new transaction.
+ */
 import axiosInstance from "../../../api/myBankApi";
 import useAxios from "../../../hooks/useAxios";
 import useAuth from "../../../hooks/useAuth";
@@ -29,7 +32,7 @@ const TransactionCreation = ({
   //retrieve axios response, error, loading and axiosFetch function from useAxios hook
   const [response, error, loading, axiosFetch] = useAxios();
 
-  //function for validate the destination account
+  //function for validate the destination account on the server
   const validateDestinationAcc = async () => {
     await axiosFetch({
       axiosInstance: axiosInstance(auth),
@@ -115,6 +118,7 @@ const TransactionCreation = ({
     }
   };
 
+  //hanle for selecing source account
   const handleSelectChange = (e) => {
     const account = accounts.find((account) => account._id === e.target.value);
     setTransaction({
