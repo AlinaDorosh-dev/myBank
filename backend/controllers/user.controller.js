@@ -1,10 +1,8 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const asyncHandler = require("express-async-handler");
-const { generateAccessToken, generateRefreshToken } = require("../utils/jwt");
-
-
-
+const { generateAccessToken } = require("../utils/jwt");
+const ageValidation = require("../utils/ageValidation");
 
 // @desc Create new user
 // @route POST /signup
@@ -39,14 +37,7 @@ const createNewUser = asyncHandler(async (req, res) => {
     });
     newUser.save().then((newUser) => {
       const accessToken = generateAccessToken(newUser);
-      const refreshToken = generateRefreshToken(newUser);
 
-      res.cookie("jwt", refreshToken, {
-        httpOnly: true, //accessible only by web server
-        secure: process.env.NODE_ENV !== "development", //if https set to true
-        //cross-site cookie sameSite: "None",
-        maxAge: 7 * 24 * 60 * 60 * 1000, //cookie expiry: set to match refreshToken expiry
-      });
       res.status(201).json({
         status: "success",
         message: "User created successfully",
@@ -80,27 +71,101 @@ const createNewUser = asyncHandler(async (req, res) => {
 // @route PATCH auth/user/:id
 // @access Private
 const updateUser = asyncHandler(async (req, res) => {
-  console.log("reqbody",req.body);
+  const { id } = req.params;
+
+  if (id !== req.user.id) {
+    res.status(401).json({
+      status: "failed",
+      data: null,
+      message: "Unauthorized",
+    });
+  }
+
+  const {
+    password,
+    documentType,
+    documentNumber,
+    address,
+    firstName,
+    lastName,
+    phone,
+    birthDate,
+  } = req.body;
+
   try {
-    const foundUser = await User.findById(req.params.id);
+    const foundUser = await User.findById(id);
 
     // Check for user
     if (!req.user || !foundUser) {
       res.status(401);
       throw new Error("User not found");
     }
-    //encrypt password if it is provided
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      req.body.password
-        ? { ...req.body, password: await bcrypt.hash(req.body.password, 10) }
-        : req.body,
-      {
-        new: true,
+
+    //Check if user has 18 years
+    if (birthDate) {
+      let isAdult = ageValidation(birthDate);
+      console.log("isAdult", isAdult);
+      if (!isAdult) {
+        res.status(422).json({
+          status: "failed",
+          data: null,
+          message: "You must be 18 years old to register",
+        });
       }
-    );
-console.log("user was updated", updatedUser);
-    res.status(200).json({ status: "succeeded", updatedUser, error: null });
+    }
+
+    // Check if user is verified
+    if (!foundUser.userVerified) {
+      // Check for required fields
+      const requiredFields = [
+        ["Document type", documentType],
+        ["Document number", documentNumber],
+        ["Address", address],
+        ["First name", firstName],
+        ["Last name", lastName],
+        ["Phone number", phone],
+        ["Birth date", birthDate],
+      ];
+      const missingFields = requiredFields.filter((field) => !field[1]);
+
+      if (missingFields.length > 0) {
+        res.status(422).json({
+          status: "failed",
+          data: null,
+          message: `Please provide the following fields: ${missingFields.join(
+            " "
+          )}`,
+        });
+      } else {
+        const updatedUser = await User.findByIdAndUpdate(
+          id,
+
+          //encrypt password if it is provided
+          password
+            ? { ...req.body, pwdHash: await bcrypt.hash(password, 10) }
+            : { ...req.body, userVerified: true },
+          {
+            new: true,
+          }
+        );
+        console.log("user was updated", updatedUser);
+        res.status(200).json({ status: "succeeded", updatedUser, error: null });
+      }
+    } else {
+      const updatedUser = await User.findByIdAndUpdate(
+        id,
+
+        //encrypt password if it is provided
+        password
+          ? { ...req.body, pwdHash: await bcrypt.hash(password, 10) }
+          : req.body,
+        {
+          new: true,
+        }
+      );
+      console.log("user was updated", updatedUser);
+      res.status(200).json({ status: "succeeded", updatedUser, error: null });
+    }
   } catch (error) {
     return res
       .status(400)
@@ -108,15 +173,7 @@ console.log("user was updated", updatedUser);
   }
 });
 
-// @desc Upload user document 
-// @route POST auth/user/upload/:id
-// @access Private
-const uploadDocument = asyncHandler(async (req, res) => {
-console.log(req.file);
-});
-
 module.exports = {
   createNewUser,
   updateUser,
-  uploadDocument,
 };

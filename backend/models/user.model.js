@@ -67,12 +67,6 @@ const userSchema = new Schema({
     default: true,
   },
 
-  salt: {
-    type: String,
-  },
-
-  emailVerified: { type: Boolean, default: false },
-
   firstName: {
     type: String,
   },
@@ -94,10 +88,6 @@ const userSchema = new Schema({
     type: Date,
   },
 
-  attachment: {
-    type: String,
-  },
-
   userVerified: { type: Boolean, default: false },
 
   role: {
@@ -107,10 +97,6 @@ const userSchema = new Schema({
     trim: true,
     default: "user",
   },
-  accounts: [{ type: Schema.Types.ObjectId, ref: "Account"}],
-
-  notifications: [{ type: Schema.Types.ObjectId, ref: "Notification"}],
-  // cards: [String],
 });
 
 const User = mongoose.model("User", userSchema);

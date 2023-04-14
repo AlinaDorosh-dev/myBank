@@ -24,10 +24,10 @@ function App() {
             <Route path='about' element={<About />} />
             <Route path='contact' element={<Contact />} />
             <Route path='signup' element={<SignUp />} />
-            {/* <Route path='/forgot-password' element={<ForgotPassword />} /> */}
             <Route path='unauthorized' element={<Unauthorized />} />
             <Route path='*' element={<ErrorPage />} />
 
+            {/* private routes */}
             <Route
               path='dashboard'
               element={<RequireAuth allowedRole='user' />}
@@ -45,11 +45,6 @@ function App() {
                 }
               />
             </Route>
-            {/* <Route element={<RequireAuth allowedRole='user' />}> */}
-            {/* <Route path='dashboard' element={<UserDashboard />} /> */}
-            {/* <Route path='/dashboard' element={<Dashboard />} />
-            <Route path='/profile' element={<Profile />} /> */}
-            {/* </Route> */}
           </Route>
         </Routes>
       </Router>

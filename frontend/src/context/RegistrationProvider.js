@@ -4,14 +4,14 @@ import useAuth from "../hooks/useAuth";
 import axiosInstance from "../api/myBankApi";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import { useEffect } from "react";
 
 export const RegistrationContext = createContext({});
 
 const RegistrationProvider = ({ children }) => {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
-  const steps = ["Personal Info", "Address", "Upload Document"];
-  const [attachment, setAttachment] = useState(null);
+  const steps = ["Personal Info", "Address", "Document"];
 
   const [userData, setUserData] = useState({
     firstName: "",
@@ -23,11 +23,9 @@ const RegistrationProvider = ({ children }) => {
     zipCode: "",
     documentType: "",
     documentNumber: "",
-    attachment: "",
   });
 
- 
-  const [data, error, loading, axiosFetch] = useAxios();
+  const [response, error, loading, axiosFetch] = useAxios();
   const { auth } = useAuth();
   const decoded = jwt_decode(auth);
   const userId = decoded?.UserInfo?.id;
@@ -43,6 +41,11 @@ const RegistrationProvider = ({ children }) => {
     documentType,
     documentNumber,
   } = userData;
+
+  useEffect(() => {
+    response?.status === "succeeded" &&
+      navigate("/dashboard/account-management");
+  }, [response?.status]);
 
   const handleSubmit = () => {
     try {
@@ -64,19 +67,9 @@ const RegistrationProvider = ({ children }) => {
           documentNumber,
         },
       });
-      // navigate("dashboard/accountmanagement");
     } catch (error) {
       console.log(error);
     }
-    // setAttachment(e.target.files[0]);
-    // const reader = new FileReader();
-    // reader.onload = () => {
-    //   if (reader.readyState === 2) {
-    //     setAttachment(reader.result);
-    //   }
-    // };
-    // let url = reader.readAsDataURL(e.target.files[0]);
-    // console.log(url);
   };
   return (
     <RegistrationContext.Provider
@@ -86,8 +79,6 @@ const RegistrationProvider = ({ children }) => {
         steps,
         userData,
         setUserData,
-        attachment,
-        setAttachment,
         handleSubmit,
       }}
     >

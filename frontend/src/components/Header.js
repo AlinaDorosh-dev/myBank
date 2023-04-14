@@ -29,10 +29,6 @@ function Header(props) {
 
   const { auth, setAuth } = useAuth();
 
-  useEffect(() => {
-    console.log(auth);
-  }, [auth]);
-
   const navItems = [
     { text: "Home", route: "/" },
     { text: "About", route: "/about" },
@@ -45,7 +41,6 @@ function Header(props) {
   };
 
   const handleClick = (item) => {
-    console.log(item.text);
     if (item.text === "Logout") {
       setAuth("");
       navigate(item.route);
@@ -65,7 +60,11 @@ function Header(props) {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item.text} disablePadding onClick={() => handleClick(item)}>
+          <ListItem
+            key={item.text}
+            disablePadding
+            onClick={() => handleClick(item)}
+          >
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText primary={item.text} />
             </ListItemButton>

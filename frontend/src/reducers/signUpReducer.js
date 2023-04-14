@@ -3,6 +3,7 @@ import { EMAIL_REGEX, PWD_REGEX } from "../utils/regex";
 export const initialSignUpState = {
   email: "",
   validEmail: false,
+  pwd: "",
   validPwd: false,
   matchPwd: "",
   validMatch: false,

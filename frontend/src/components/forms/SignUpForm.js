@@ -8,6 +8,7 @@ import {
   FormControl,
   InputAdornment,
   IconButton,
+  Alert,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useReducer, useEffect, useRef, useState } from "react";
@@ -44,6 +45,9 @@ const SignUpForm = () => {
     pwd: false,
     matchPwd: false,
   });
+
+  //error message state
+  const [errorMsg, setErrorMsg] = useState("");
 
   //access auth state
   const { auth, setAuth } = useAuth();
@@ -84,6 +88,20 @@ const SignUpForm = () => {
   useEffect(() => {
     auth && navigate("/dashboard");
   }, [auth]);
+
+  //if we have error, we set error message
+  useEffect(() => {
+    if (error === "Request failed with status code 409") {
+      setErrorMsg(
+        "User with this email already exists. You will be redirected to login page"
+      );
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
+    } else if (error) {
+      setErrorMsg("Connection error. Please reload the app");
+    }
+  }, [error]);
 
   //this object will be sent to backend
   const newUser = {
@@ -152,6 +170,11 @@ const SignUpForm = () => {
         <Typography variant='h4' align='center' sx={{ display: "block" }}>
           Sign Up
         </Typography>
+        {errorMsg && (
+          <Alert severity='error' sx={{ mt: 2 }}>
+            {errorMsg}
+          </Alert>
+        )}
 
         <FormControl>
           <TextField
