@@ -5,6 +5,15 @@ import axiosInstance from "../api/myBankApi";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { useEffect } from "react";
+import {
+  NAME_REGEX,
+  PHONE_REGEX,
+  ZIPCODE_REGEX,
+  DNI_REGEX,
+  NIE_REGEX,
+  ADDRESS_REGEX,
+} from "../utils/regex";
+import { ageValidation } from "../utils/ageValidation";
 
 export const RegistrationContext = createContext({});
 
@@ -23,6 +32,30 @@ const RegistrationProvider = ({ children }) => {
     zipCode: "",
     documentType: "",
     documentNumber: "",
+  });
+
+  const [inputsValidation, setInputsValidation] = useState({
+    firstName: false,
+    lastName: false,
+    phone: false,
+    birthDate: false,
+    address: false,
+    city: false,
+    zipCode: false,
+    documentType: false,
+    documentNumber: false,
+  });
+
+  const [inputFocus, setInputFocus] = useState({
+    firstName: false,
+    lastName: false,
+    phone: false,
+    birthDate: false,
+    address: false,
+    city: false,
+    zipCode: false,
+    documentType: false,
+    documentNumber: false,
   });
 
   const [response, error, loading, axiosFetch] = useAxios();
@@ -45,9 +78,73 @@ const RegistrationProvider = ({ children }) => {
   useEffect(() => {
     response?.status === "succeeded" &&
       navigate("/dashboard/account-management");
+      console.log("response?.status", response?.status);
   }, [response?.status]);
 
+  useEffect(() => {
+    if (userData.firstName)
+      setInputsValidation({
+        ...inputsValidation,
+        firstName: NAME_REGEX.test(userData.firstName),
+      });
+
+    if (userData.lastName)
+      setInputsValidation({
+        ...inputsValidation,
+        lastName: NAME_REGEX.test(userData.lastName),
+      });
+
+    if (userData.phone)
+      setInputsValidation({
+        ...inputsValidation,
+        phone: PHONE_REGEX.test(userData.phone),
+      });
+
+    if (userData.birthDate)
+      setInputsValidation({
+        ...inputsValidation,
+        birthDate: ageValidation(userData.birthDate),
+      });
+
+    if (userData.address.length > 5)
+      setInputsValidation({
+        ...inputsValidation,
+        address: true,
+      });
+
+    if (userData.city.length >= 3)
+      setInputsValidation({
+        ...inputsValidation,
+        city: true,
+      });
+
+    if (userData.zipCode)
+      setInputsValidation({
+        ...inputsValidation,
+        zipCode: ZIPCODE_REGEX.test(userData.zipCode),
+      });
+
+    if (userData.documentType === "dni" || userData.documentType === "nie")
+      setInputsValidation({
+        ...inputsValidation,
+        documentType: true,
+      });
+
+    if (userData.documentNumber)
+      setInputsValidation({
+        ...inputsValidation,
+        documentNumber:
+          documentType === "dni"
+            ? DNI_REGEX.test(userData.documentNumber)
+            : NIE_REGEX.test(userData.documentNumber),
+      });
+    console.log("inputsValidation.address", inputsValidation.address);
+  }, [userData]);
+
   const handleSubmit = () => {
+    console.log("userData", userData);
+    
+
     try {
       axiosFetch({
         axiosInstance: axiosInstance(auth),
@@ -57,7 +154,7 @@ const RegistrationProvider = ({ children }) => {
           firstName,
           lastName,
           phone,
-          birthDate,
+          birthDate:new Date(birthDate).toISOString(),
           address: {
             address,
             city,
@@ -79,6 +176,10 @@ const RegistrationProvider = ({ children }) => {
         steps,
         userData,
         setUserData,
+        inputsValidation,
+        setInputsValidation,
+        inputFocus,
+        setInputFocus,
         handleSubmit,
       }}
     >

@@ -47,6 +47,10 @@ const AccountsTab = ({ accounts, setAccounts }) => {
       setNoAccounts(true);
     }
   }, [response.data]);
+
+  useEffect(() => {
+    if (accounts.length) setNoAccounts(false);
+  }, [accounts]);
   return (
     <Box
       sx={{

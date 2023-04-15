@@ -71,6 +71,7 @@ const createNewUser = asyncHandler(async (req, res) => {
 // @route PATCH auth/user/:id
 // @access Private
 const updateUser = asyncHandler(async (req, res) => {
+  console.log("req.body", req.body);
   const { id } = req.params;
 
   if (id !== req.user.id) {

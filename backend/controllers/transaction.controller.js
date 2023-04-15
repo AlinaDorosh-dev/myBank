@@ -11,7 +11,7 @@ const { ObjectId } = require("mongodb");
 //@route POST /transactions
 //@access Private
 const transactionController = asyncHandler(async (req, res) => {
-  console.log(req.body);
+  
   if (!req.user) {
     return res
       .status(401)
@@ -178,7 +178,7 @@ const transactionController = asyncHandler(async (req, res) => {
 
         const newNotification = await Notification.create({
           user: foundDestinationAccount.user,
-          message: `You have received a new transaction from ${benefactor.firstName} ${benefactor.lastName} for ${amount}€`,
+          message: `You received a new transfer from ${benefactor.firstName} ${benefactor.lastName} for ${amount}€`,
         });
 
         await User.findByIdAndUpdate(foundDestinationAccount.user, {

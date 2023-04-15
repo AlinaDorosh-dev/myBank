@@ -15,15 +15,20 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useTheme } from "@mui/material/styles";
 import HorizontalLinearStepper from "./HorizontalLinearStepper";
-import { RegistrationContext } from "../../context/RegistrationProvider"
+import { RegistrationContext } from "../../context/RegistrationProvider";
 import { useContext } from "react";
 
-import { useState } from "react";
 const RegisterForm = () => {
-  const theme = useTheme();
-  const { activeStep, userData, setUserData } = useContext(RegistrationContext);
+  const {
+    activeStep,
+    userData,
+    setUserData,
+    inputsValidation,
+    setInputsValidation,
+    inputFocus,
+    setInputFocus,
+  } = useContext(RegistrationContext);
 
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
@@ -63,9 +68,19 @@ const RegisterForm = () => {
               label='First Name'
               type='text'
               name='firstName'
+              minLength='3'
               autoFocus
               value={userData.firstName}
               onChange={(e) => handleChange(e)}
+              onFocus={() => setInputFocus({ ...inputFocus, firstName: true })}
+              onBlur={() => setInputFocus({ ...inputFocus, firstName: false })}
+              helperText={
+                userData.firstName &&
+                inputFocus.firstName &&
+                !inputsValidation.firstName
+                  ? "At least 3 characters"
+                  : null
+              }
             />
             <TextField
               required
@@ -73,8 +88,18 @@ const RegisterForm = () => {
               label='Last Name'
               type='text'
               name='lastName'
+              minLength='3'
               value={userData.lastName}
               onChange={(e) => handleChange(e)}
+              onFocus={() => setInputFocus({ ...inputFocus, lastName: true })}
+              onBlur={() => setInputFocus({ ...inputFocus, lastName: false })}
+              helperText={
+                userData.lastName &&
+                inputFocus.lastName &&
+                !inputsValidation.lastName
+                  ? "At least 3 characters"
+                  : null
+              }
             />
             <TextField
               required
@@ -82,13 +107,21 @@ const RegisterForm = () => {
               label='Phone'
               type='phone'
               name='phone'
+              minLength='9'
               value={userData.phone}
               onChange={(e) => handleChange(e)}
+              onFocus={() => setInputFocus({ ...inputFocus, phone: true })}
+              onBlur={() => setInputFocus({ ...inputFocus, phone: false })}
+              helperText={
+                userData.phone && inputFocus.phone && !inputsValidation.phone
+                  ? "At least 9 numbers"
+                  : null
+              }
             />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label='Birth Date'
-                //value={userData.birthDate}
+                disableFuture
                 onChange={(e) => setUserData({ ...userData, birthDate: e.$d })}
               />
             </LocalizationProvider>
@@ -120,6 +153,7 @@ const RegisterForm = () => {
               label='Zip code'
               type='number'
               name='zipCode'
+              minLength='5'
               value={userData.zipCode}
               onChange={(e) => handleChange(e)}
             />
@@ -147,6 +181,7 @@ const RegisterForm = () => {
               label='Document Number'
               type='text'
               name='documentNumber'
+              minLength='9'
               value={userData.documentNumber}
               onChange={(e) => handleChange(e)}
             />

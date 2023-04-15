@@ -9,7 +9,7 @@ import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { RegistrationContext } from "../../context/RegistrationProvider";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function HorizontalLinearStepper() {
   const {
@@ -17,8 +17,8 @@ export default function HorizontalLinearStepper() {
     setActiveStep,
     steps,
     userData,
-    attachment,
     handleSubmit,
+    inputsValidation,
   } = useContext(RegistrationContext);
 
   const handleNext = () => {
@@ -28,6 +28,16 @@ export default function HorizontalLinearStepper() {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
+
+  const [invalidFields, setInvalidFields] = useState([]);
+
+  useEffect(() => {
+    const invalidFields = Object.entries(inputsValidation).filter(
+      ([key, value]) => value === false
+    );
+    console.log("invalidFields", invalidFields);
+    setInvalidFields(invalidFields);
+  }, [inputsValidation]);
 
   return (
     <Box sx={{ width: "100%", mt: 1 }}>
@@ -90,8 +100,7 @@ export default function HorizontalLinearStepper() {
               <Button
                 variant='outlined'
                 disabled={
-                  !userData.documentType || !userData.documentNumber
-                  //  || !attachment
+                  invalidFields.length > 0 
                 }
                 onClick={() => handleSubmit()}
               >
