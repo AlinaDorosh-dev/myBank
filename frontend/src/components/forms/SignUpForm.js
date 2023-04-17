@@ -278,7 +278,7 @@ const SignUpForm = () => {
                     onClick={() =>
                       setShowPassword({
                         ...showPassword,
-                        pwd: !showPassword.matchPwd,
+                        matchPwd: !showPassword.matchPwd,
                       })
                     }
                   >

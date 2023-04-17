@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
+import AboutPage from "./pages/AboutPage";
+import ContactPage from "./pages/ContactPage";
 import SignUp from "./pages/SignUp";
 import ErrorPage from "./pages/ErrorPage";
 import Layout from "./components/Layout";
@@ -22,8 +22,8 @@ function App() {
           <Route path='/' element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path='login' element={<Login />} />
-            <Route path='about' element={<About />} />
-            <Route path='contact' element={<Contact />} />
+            <Route path='about' element={<AboutPage />} />
+            <Route path='contact' element={<ContactPage />} />
             <Route path='signup' element={<SignUp />} />
             <Route path='unauthorized' element={<Unauthorized />} />
             <Route path='*' element={<ErrorPage />} />

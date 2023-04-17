@@ -10,7 +10,10 @@ const FinishRegistration = () => {
       sx={{
         height: "100vh",
         backgroundColor: theme.palette.primary.background,
-        padding: 5,
+        pt: { xs: 4, sm: 6, md: 8, lg: 10},
+        pb: { xs: 4, sm: 6, md: 8, lg: 10},
+        pl: { xs: 2, sm: 4, md: 6, lg: 8},
+        pr: { xs: 2, sm: 4, md: 6, lg: 8},
       }}
     >
       <RegistrationProvider>

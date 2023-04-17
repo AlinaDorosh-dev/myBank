@@ -25,7 +25,8 @@ const TransactionConfirmation = ({
   //retrieve auth from useAuth hook
   const { auth } = useAuth();
 
-  const { transactions, setTransactions } = useContext(TransactionsContext);
+  //retrieve transactions state
+  const { setTransactions } = useContext(TransactionsContext);
 
   //retrieve axios response, error, loading and axiosFetch function from useAxios hook
   const [response, error, loading, axiosFetch] = useAxios();
@@ -63,12 +64,6 @@ const TransactionConfirmation = ({
           outgoingTransactions: [...prev.outgoingTransactions, response.data],
         };
       });
-      // console.log("transactions", transactions);
-      // const updatedTransactions = transactions?.outgoingTransactions?.push(
-      //   response.data
-      // );
-      // setTransactions(updatedTransactions);
-      // console.log("updatedTransactions", updatedTransactions);
     }
   }, [response, error]);
 

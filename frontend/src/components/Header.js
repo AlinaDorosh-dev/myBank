@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   AppBar,
   Box,
@@ -12,30 +11,39 @@ import {
   Toolbar,
   Typography,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import { useEffect, useContext } from "react";
-import  AuthContext  from "../context/AuthProvider";
+import { useState, useContext } from "react";
+import AuthContext from "../context/AuthProvider";
 
 const drawerWidth = 240;
 
 function Header(props) {
   const theme = useTheme();
   const navigate = useNavigate();
-  const {auth: myauth} = useContext(AuthContext);
-  const {log} =console;
+  const { auth: myauth } = useContext(AuthContext);
+  const { log } = console;
   const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [confirmLogout, setConfirmLogout] = useState(false);
 
   const { auth, setAuth } = useAuth();
   log("auth", auth);
   log("myauth", myauth);
 
   const navItems = [
-    { text: "Home", route: "/" },
+    {
+      text: !auth ? "Home" : "My Dashboard",
+      route: !auth ? "/" : "/dashboard",
+    },
     { text: "About", route: "/about" },
     { text: "Contact", route: "/contact" },
     { text: !auth ? "Login" : "Logout", route: !auth ? "/login" : "/" },
@@ -47,11 +55,16 @@ function Header(props) {
 
   const handleClick = (item) => {
     if (item.text === "Logout") {
-      setAuth("");
-      navigate(item.route);
+      setConfirmLogout(true);
     } else {
       navigate(item.route);
     }
+  };
+
+  const handleLogout = () => {
+    setConfirmLogout(false);
+    setAuth("");
+    navigate("/");
   };
 
   const drawer = (
@@ -84,6 +97,41 @@ function Header(props) {
 
   return (
     <Box sx={{ display: "flex" }}>
+      <Dialog
+        open={confirmLogout}
+        onClose={() => setConfirmLogout(false)}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>
+          <Typography
+            color={theme.palette.primary.dark}
+            sx={{ mt: 2, width: "100%", textAlign: "center" }}
+            variant='h5'
+          >
+            Log Out
+          </Typography>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Are you sure you want to log out?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant='outlined' autoFocus onClick={() => setConfirmLogout(false)}>
+            Cancel
+          </Button>
+          <Button
+            variant='contained'
+            onClick={() => {
+              handleLogout();
+            }}
+          >
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <AppBar component='nav'>
         <Toolbar>
           <IconButton
