@@ -1,5 +1,5 @@
 /**
- * @fileoverview This file contains the TransactionsHistory component. This component is used to display users transactions history 
+ * @fileoverview This file contains the TransactionsHistory component. This component is used to display users transactions history
  */
 import {
   Typography,
@@ -16,24 +16,18 @@ import {
   TableRow,
 } from "@mui/material";
 import { NavigateBefore, NavigateNext } from "@mui/icons-material";
-import axiosInstance from "../../../api/myBankApi";
-import useAxios from "../../../hooks/useAxios";
-import useAuth from "../../../hooks/useAuth";
-import { useEffect, useState } from "react";
+
+import { TransactionsContext } from "../../../context/TransactionsProvider";
+import { useEffect, useState, useContext } from "react";
 import { useTheme } from "@mui/material/styles";
 
 const TransactionsHistory = () => {
   const theme = useTheme();
 
-  //retrieve auth state
-  const { auth } = useAuth();
+  //retrieve transactions state
+  const { transactions, noTransactions, errMessage } =
+    useContext(TransactionsContext);
 
-  //retrieve response, error, loading and axiosFetch from useAxios custom hook
-  const [response, error, loading, axiosFetch] = useAxios();
-
-  const [transactions, setTransactions] = useState([]);
-  const [noTransactions, setNoTransactions] = useState(false);
- 
   //states for pagination
   const [page, setPage] = useState(0);
   const [rows, setRows] = useState([]);
@@ -46,26 +40,6 @@ const TransactionsHistory = () => {
     { field: "amount", headerName: "Amount" },
     { field: "type", headerName: "Type" },
   ];
-
-  //fetch transactions on component mount
-  useEffect(() => {
-    axiosFetch({
-      axiosInstance: axiosInstance(auth),
-      method: "GET",
-      url: "/transactions",
-    });
-  }, []);
-
-  //set transactions state when response is received
-  useEffect(() => {
-    if (response?.data) {
-      setTransactions(response.data);
-      console.log(response.data);
-    }
-    if (response?.data?.length === 0) {
-      setNoTransactions(true);
-    }
-  }, [response.data]);
 
   //reformat transactions data for table
   useEffect(() => {
@@ -124,89 +98,101 @@ const TransactionsHistory = () => {
 
   return (
     <Box>
-      <Paper
-        sx={{
-          width: { xs: "100%", sm: "75%", md: "85%" },
-          ml: { xs: 0, sm: 28, md: 15, lg: 20, xl: 25 },
-          maxWidth: { sm: 580, md: 800, lg: 1000, xl: 1200 },
-          mt: 20,
-          backgroundColor: theme.palette.primary.dark,
-        }}
-      >
-        <Box
+      {noTransactions ? (
+        <Typography
+          color={theme.palette.primary.dark}
+          sx={{ mt: 12, width: "100%", textAlign: "center" }}
+          variant='h5'
+        >
+          You don't have any transactions yet. Make your first transaction now!
+        </Typography>
+      ) : errMessage ? (
+        <Alert severity='error'>{errMessage}</Alert>
+      ) : (
+        <Paper
           sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
+            width: { xs: "100%", sm: "75%", md: "85%" },
+            ml: { xs: 0, sm: 28, md: 15, lg: 20, xl: 25 },
+            maxWidth: { sm: 580, md: 800, lg: 1000, xl: 1200 },
+            mt: 20,
+            backgroundColor: theme.palette.primary.dark,
           }}
         >
-          <Button onClick={handlePreviousPage} disabled={page === 0}>
-            <NavigateBefore fontSize='large' sx={{ color: "white" }} />
-          </Button>
-          <Typography
+          <Box
             sx={{
-              textAlign: "center",
-              fontWeight: "bold",
-              p: 2,
-              color: "white",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
             }}
           >
-            TRANSACTIONS HISTORY
-          </Typography>
-          <Button
-            onClick={handleNextPage}
-            disabled={page === rows.length / 5 - 1}
-          >
-            <NavigateNext fontSize='large' sx={{ color: "white" }} />
-          </Button>
-        </Box>
-
-        <TableContainer
-          component={Box}
-          sx={{
-            backgroundColor: "white",
-          }}
-        >
-          <Table
-            sx={{
-              "& .MuiTableRow-root:nth-child(even)": {
-                bgcolor: theme.palette.tableRow.even,
-              },
-            
-            }}
-          >
-            <TableHead
-            sx={{
-              backgroundColor: theme.palette.primary.dark,
-              
-            }}
+            <Button onClick={handlePreviousPage} disabled={page === 0}>
+              <NavigateBefore fontSize='large' sx={{ color: "white" }} />
+            </Button>
+            <Typography
+              sx={{
+                textAlign: "center",
+                fontWeight: "bold",
+                p: 2,
+                color: "white",
+              }}
             >
-              <TableRow>
-                {COLUMNS.map((column) => (
-                  <TableCell key={column.field} align='center'
-                  sx={{
-                    color: "white",
-                  }}
-                  >
-                    {column.headerName}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody sx={{}}>
-              {visibleRows.map((row) => (
-                <TableRow key={row.id}>
-                  <TableCell align='center'>{row.date}</TableCell>
-                  <TableCell align='center'>{row.name}</TableCell>
-                  <TableCell align='center'>{row.description}</TableCell>
-                  <TableCell align='center'>{row.amount}</TableCell>
-                  <TableCell align='center'>{row.type}</TableCell>
+              TRANSACTIONS HISTORY
+            </Typography>
+            <Button
+              onClick={handleNextPage}
+              disabled={page === rows.length / 5 - 1}
+            >
+              <NavigateNext fontSize='large' sx={{ color: "white" }} />
+            </Button>
+          </Box>
+
+          <TableContainer
+            component={Box}
+            sx={{
+              backgroundColor: "white",
+            }}
+          >
+            <Table
+              sx={{
+                "& .MuiTableRow-root:nth-of-type(even)": {
+                  bgcolor: theme.palette.tableRow.even,
+                },
+              }}
+            >
+              <TableHead
+                sx={{
+                  backgroundColor: theme.palette.primary.dark,
+                }}
+              >
+                <TableRow>
+                  {COLUMNS.map((column) => (
+                    <TableCell
+                      key={column.field}
+                      align='center'
+                      sx={{
+                        color: "white",
+                      }}
+                    >
+                      {column.headerName}
+                    </TableCell>
+                  ))}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
+              </TableHead>
+              <TableBody sx={{}}>
+                {visibleRows.map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell align='center'>{row.date}</TableCell>
+                    <TableCell align='center'>{row.name}</TableCell>
+                    <TableCell align='center'>{row.description}</TableCell>
+                    <TableCell align='center'>{row.amount}</TableCell>
+                    <TableCell align='center'>{row.type}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+      )}
     </Box>
   );
 };

@@ -1,6 +1,6 @@
 /**
  * @fileoverview AccountsTab component renders the accounts tab in the account management page
- * 
+ *
  */
 
 import NewAccountBtn from "./NewAccountBtn";
@@ -20,7 +20,7 @@ const AccountsTab = ({ accounts, setAccounts }) => {
   const [response, error, loading, axiosFetch] = useAxios();
 
   const theme = useTheme();
-  
+
   //state for total balance
   const [totalBalance, setTotalBalance] = useState(0);
 
@@ -68,7 +68,7 @@ const AccountsTab = ({ accounts, setAccounts }) => {
               width: "100%",
               alignItems: "center",
               mx: "auto",
-              p:{sm:3}
+              p: { sm: 3 },
             }}
           >
             <Paper
@@ -90,7 +90,7 @@ const AccountsTab = ({ accounts, setAccounts }) => {
               setAccounts={setAccounts}
             />
           </Box>
-          {!loading && accounts.length && (
+          {!loading && accounts.length > 0 && (
             <>
               <Box sx={{ mt: 3, width: "100%" }}>
                 <Typography

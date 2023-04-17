@@ -49,7 +49,7 @@ const TransactionCreation = ({
     const result = IBAN_REGEX.test(
       transaction.destinationAccount.replace(/ /g, "")
     );
-    console.log(result);
+
     if (result) {
       validateDestinationAcc();
     }

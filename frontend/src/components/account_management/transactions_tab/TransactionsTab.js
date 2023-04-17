@@ -5,6 +5,7 @@ import { Button } from "@mui/material";
 import { useState } from "react";
 import NewTransactionForm from "./NewTransactionForm";
 import TransactionsHistory from "./TransactionsHistory";
+import TransactionsProvider from "../../../context/TransactionsProvider";
 
 const TransactionsTab = ({ accounts }) => {
   //state for modal
@@ -28,14 +29,16 @@ const TransactionsTab = ({ accounts }) => {
       >
         Transfer money
       </Button>
-      <NewTransactionForm
-        openForm={openForm}
-        setOpenForm={setOpenForm}
-        handleOpenForm={handleOpenForm}
-        handleCloseForm={handleCloseForm}
-        accounts={accounts}
-      />
-      <TransactionsHistory />
+      <TransactionsProvider>
+        <NewTransactionForm
+          openForm={openForm}
+          setOpenForm={setOpenForm}
+          handleOpenForm={handleOpenForm}
+          handleCloseForm={handleCloseForm}
+          accounts={accounts}
+        />
+        <TransactionsHistory />
+      </TransactionsProvider>
     </>
   );
 };

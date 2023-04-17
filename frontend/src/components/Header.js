@@ -17,17 +17,22 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
+import  AuthContext  from "../context/AuthProvider";
 
 const drawerWidth = 240;
 
 function Header(props) {
   const theme = useTheme();
   const navigate = useNavigate();
+  const {auth: myauth} = useContext(AuthContext);
+  const {log} =console;
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const { auth, setAuth } = useAuth();
+  log("auth", auth);
+  log("myauth", myauth);
 
   const navItems = [
     { text: "Home", route: "/" },

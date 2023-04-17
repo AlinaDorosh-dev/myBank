@@ -12,6 +12,7 @@ import { AuthProvider } from "./context/AuthProvider";
 import NotificationProvider from "./context/NotificationProvider";
 import AccountManagement from "./pages/AccountManagement";
 import FinishRegistration from "./pages/FinishRegistration";
+
 function App() {
   return (
     <AuthProvider>

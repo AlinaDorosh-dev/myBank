@@ -11,7 +11,6 @@ const { ObjectId } = require("mongodb");
 //@route POST /transactions
 //@access Private
 const transactionController = asyncHandler(async (req, res) => {
-  
   if (!req.user) {
     return res
       .status(401)
@@ -184,9 +183,19 @@ const transactionController = asyncHandler(async (req, res) => {
         await User.findByIdAndUpdate(foundDestinationAccount.user, {
           $push: { notifications: newNotification._id },
         });
-        res
-          .status(200)
-          .json({ status: "succeeded", data: newTransaction, error: null });
+
+        const data = await Transaction.findById({
+          _id: newTransaction._id,
+        }).populate({
+          path: "destinationAcc",
+          select: "number user",
+          populate: { path: "user", select: "firstName lastName" },
+        });
+        res.status(200).json({
+          status: "succeeded",
+          data,
+          error: null,
+        });
       } else {
         console.log(
           "The money was not transferred. The transaction was intentionally aborted."
@@ -251,11 +260,13 @@ const getTransactionsByUser = asyncHandler(async (req, res) => {
     const outgoingTransactions = await Transaction.find({
       sourceAcc: { $in: accounts },
       status: "completed",
-    }).populate({
-      path: "destinationAcc",
-      select: "number user",
-      populate: { path: "user", select: "firstName lastName" },
-    }).exec();
+    })
+      .populate({
+        path: "destinationAcc",
+        select: "number user",
+        populate: { path: "user", select: "firstName lastName" },
+      })
+      .exec();
 
     res.status(200).json({
       status: "succeeded",

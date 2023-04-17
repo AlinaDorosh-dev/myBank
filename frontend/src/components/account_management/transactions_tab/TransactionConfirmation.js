@@ -11,9 +11,10 @@ import {
 import axiosInstance from "../../../api/myBankApi";
 import useAxios from "../../../hooks/useAxios";
 import useAuth from "../../../hooks/useAuth";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useTheme } from "@mui/material/styles";
 import { initialTransactionState } from "./NewTransactionForm";
+import { TransactionsContext } from "../../../context/TransactionsProvider";
 
 const TransactionConfirmation = ({
   transaction,
@@ -23,6 +24,8 @@ const TransactionConfirmation = ({
 }) => {
   //retrieve auth from useAuth hook
   const { auth } = useAuth();
+
+  const { transactions, setTransactions } = useContext(TransactionsContext);
 
   //retrieve axios response, error, loading and axiosFetch function from useAxios hook
   const [response, error, loading, axiosFetch] = useAxios();
@@ -49,9 +52,23 @@ const TransactionConfirmation = ({
 
   //update alert state when response or error changes
   useEffect(() => {
-    console.log("response", response);
     if (response?.data || error) {
       setOpenAlert(true);
+    }
+
+    if (response?.data) {
+      setTransactions((prev) => {
+        return {
+          ...prev,
+          outgoingTransactions: [...prev.outgoingTransactions, response.data],
+        };
+      });
+      // console.log("transactions", transactions);
+      // const updatedTransactions = transactions?.outgoingTransactions?.push(
+      //   response.data
+      // );
+      // setTransactions(updatedTransactions);
+      // console.log("updatedTransactions", updatedTransactions);
     }
   }, [response, error]);
 

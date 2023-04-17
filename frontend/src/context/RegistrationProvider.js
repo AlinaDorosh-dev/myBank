@@ -11,7 +11,6 @@ import {
   ZIPCODE_REGEX,
   DNI_REGEX,
   NIE_REGEX,
-  ADDRESS_REGEX,
 } from "../utils/regex";
 import { ageValidation } from "../utils/ageValidation";
 
@@ -78,7 +77,7 @@ const RegistrationProvider = ({ children }) => {
   useEffect(() => {
     response?.status === "succeeded" &&
       navigate("/dashboard/account-management");
-      console.log("response?.status", response?.status);
+    console.log("response?.status", response?.status);
   }, [response?.status]);
 
   useEffect(() => {
@@ -143,7 +142,6 @@ const RegistrationProvider = ({ children }) => {
 
   const handleSubmit = () => {
     console.log("userData", userData);
-    
 
     try {
       axiosFetch({
@@ -154,7 +152,7 @@ const RegistrationProvider = ({ children }) => {
           firstName,
           lastName,
           phone,
-          birthDate:new Date(birthDate).toISOString(),
+          birthDate: new Date(birthDate).toISOString(),
           address: {
             address,
             city,
