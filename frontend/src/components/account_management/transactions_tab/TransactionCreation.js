@@ -5,7 +5,7 @@ import axiosInstance from "../../../api/myBankApi";
 import useAxios from "../../../hooks/useAxios";
 import useAuth from "../../../hooks/useAuth";
 import { useEffect, useState } from "react";
-import { IBAN_REGEX } from "../../../utils/regex";
+import { IBAN_REGEX, AMOUNT_REGEX } from "../../../utils/regex";
 import {
   Button,
   Typography,
@@ -73,20 +73,30 @@ const TransactionCreation = ({
     description: "",
   });
 
+  useEffect(() => {
+    setInstructions({
+      destinationAccount: "",
+      amount: "",
+      description: "",
+    });
+  }, [transaction]);
+
   const ibanTest = () =>
     IBAN_REGEX.test(transaction.destinationAccount.replace(/ /g, ""));
+
+   const amountTest = () =>
+    AMOUNT_REGEX.test(transaction.amount);
 
   //handle proceed to transaction confirmation
   const handleNewTransaction = async () => {
     switch (true) {
       case !ibanTest():
-        console.log("ibanTest", ibanTest);
         setInstructions({
           ...instructions,
           destinationAccount: "Please enter a valid destination IBAN",
         });
         break;
-      case ibanTest && !transaction.validDestinationAcc:
+      case ibanTest() && !transaction.validDestinationAcc:
         setInstructions({
           ...instructions,
           destinationAccount:
@@ -99,7 +109,7 @@ const TransactionCreation = ({
           amount: "Insufficient funds in source account",
         });
         break;
-      case transaction.amount <= 0:
+      case transaction.amount <= 0 || !amountTest():
         setInstructions({
           ...instructions,
           amount: "Please enter a valid amount",
@@ -118,7 +128,7 @@ const TransactionCreation = ({
     }
   };
 
-  //hanle for selecing source account
+  //handle for selecing source account
   const handleSelectChange = (e) => {
     const account = accounts.find((account) => account._id === e.target.value);
     setTransaction({
@@ -127,6 +137,22 @@ const TransactionCreation = ({
       sourceAccountBalance: account.balance,
     });
   };
+
+  //handle input change
+  const handleInputChange = (e) => {
+    if (e.target.name === "amount") {
+      console.log(Number(e.target.value).toFixed(2));
+      setTransaction({
+        ...transaction,
+        [e.target.name]: Number(e.target.value).toFixed(2),
+      });
+    }
+    setTransaction({
+      ...transaction,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   return (
     <>
       <Typography
@@ -198,24 +224,21 @@ const TransactionCreation = ({
             width: "100%",
           }}
           value={transaction.destinationAccount}
-          onChange={(e) =>
-            setTransaction({
-              ...transaction,
-              destinationAccount: e.target.value,
-            })
-          }
+          name='destinationAccount'
+          onChange={(e) => handleInputChange(e)}
         />
         <InputLabel id='amount'>3. Enter amount:</InputLabel>
         <OutlinedInput
           type='number'
+          step='.01'
+          pattern='^\d*(\.\d{0,2})?$'
           id='amount-input'
           variant='outlined'
           startAdornment={<InputAdornment position='start'>€</InputAdornment>}
           sx={{ width: "100%", mb: 2 }}
           value={transaction.amount}
-          onChange={(e) =>
-            setTransaction({ ...transaction, amount: e.target.value })
-          }
+          name='amount'
+          onChange={(e) => handleInputChange(e)}
         />
         <InputLabel id='description'>4. Enter description:</InputLabel>
         <TextField
@@ -225,12 +248,8 @@ const TransactionCreation = ({
             width: "100%",
           }}
           value={transaction.description}
-          onChange={(e) =>
-            setTransaction({
-              ...transaction,
-              description: e.target.value,
-            })
-          }
+          name='description'
+          onChange={(e) => handleInputChange(e)}
         />
         <Box
           sx={{

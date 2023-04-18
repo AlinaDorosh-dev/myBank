@@ -50,6 +50,7 @@ const TransactionsProvider = ({ children }) => {
         setTransactions,
         noTransactions,
         errMessage,
+        loading,
       }}
     >
       {children}

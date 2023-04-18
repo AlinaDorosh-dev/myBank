@@ -21,7 +21,10 @@ const NotificationProvider = ({ children }) => {
 
   useEffect(() => {
     if (response?.data) {
-      setNotifications(response.data);
+      const sortedNotifications = response.data.sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      );
+      setNotifications(sortedNotifications);
       console.log(response.data);
     }
     if (response?.data?.length === 0) {
@@ -30,12 +33,14 @@ const NotificationProvider = ({ children }) => {
   }, [response.data]);
 
   return (
-    <NotificationContext.Provider value={{
+    <NotificationContext.Provider
+      value={{
         notifications,
         setNotifications,
         noNotifications,
-        setNoNotifications
-    }}>
+        setNoNotifications,
+      }}
+    >
       {children}
     </NotificationContext.Provider>
   );

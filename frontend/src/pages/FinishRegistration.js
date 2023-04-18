@@ -8,7 +8,7 @@ const FinishRegistration = () => {
   return (
     <Box
       sx={{
-        height: "100vh",
+        minHeight: "100vh",
         backgroundColor: theme.palette.primary.background,
         pt: { xs: 4, sm: 6, md: 8, lg: 10},
         pb: { xs: 4, sm: 6, md: 8, lg: 10},

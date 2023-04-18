@@ -1,13 +1,15 @@
 /**
  * @fileoverview This file contains the stepper component for multistep registration form.
  */
-
-import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import {
+  Box,
+  Button,
+  Step,
+  StepLabel,
+  Stepper,
+  Typography,
+  Alert,
+} from "@mui/material";
 import { RegistrationContext } from "../../context/RegistrationProvider";
 import { useContext, useEffect, useState } from "react";
 
@@ -30,17 +32,54 @@ export default function HorizontalLinearStepper() {
   };
 
   const [invalidFields, setInvalidFields] = useState([]);
+  const [disableStepTwo, setDisableStepTwo] = useState(true);
+  const [disableStepThree, setDisableStepThree] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   useEffect(() => {
-    const invalidFields = Object.entries(inputsValidation).filter(
+    let invalidFields = Object.entries(inputsValidation).filter(
       ([key, value]) => value === false
     );
-    console.log("invalidFields", invalidFields);
     setInvalidFields(invalidFields);
   }, [inputsValidation]);
 
+  useEffect(() => {
+    //Anytime userData changes remove alert
+    setShowAlert(false);
+    setAlertMessage("");
+    console.log("userData", userData);
+  }, [userData]);
+
+  useEffect(() => {
+    if (
+      userData.firstName &&
+      userData.lastName &&
+      userData.phone &&
+      userData.birthDate
+    ) {
+      setDisableStepTwo(false);
+    }
+  }, [
+    userData.firstName,
+    userData.lastName,
+    userData.birthDate,
+    userData.phone,
+  ]);
+
+  useEffect(() => {
+    if (userData.address && userData.city && userData.zipCode) {
+      setDisableStepThree(false);
+    }
+  }, [userData.address, userData.city, userData.zipCode]);
+
   return (
     <Box sx={{ width: "100%", mt: 1 }}>
+      {showAlert && (
+        <Alert severity='error' sx={{ mb: 2 }}>
+          {alertMessage}
+        </Alert>
+      )}
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
           const stepProps = {};
@@ -73,12 +112,7 @@ export default function HorizontalLinearStepper() {
             {activeStep === 0 && (
               <Button
                 variant='outlined'
-                disabled={
-                  !userData.firstName ||
-                  !userData.lastName ||
-                  !userData.phone ||
-                  !userData.birthDate
-                }
+                disabled={disableStepTwo}
                 onClick={handleNext}
               >
                 Next
@@ -87,9 +121,7 @@ export default function HorizontalLinearStepper() {
             {activeStep === 1 && (
               <Button
                 variant='outlined'
-                disabled={
-                  !userData.address || !userData.city || !userData.zipCode
-                }
+                disabled={disableStepThree}
                 onClick={handleNext}
               >
                 Next
@@ -99,9 +131,7 @@ export default function HorizontalLinearStepper() {
             {activeStep === 2 && (
               <Button
                 variant='outlined'
-                disabled={
-                  invalidFields.length > 0 
-                }
+                disabled={invalidFields.length > 0}
                 onClick={() => handleSubmit()}
               >
                 Finish

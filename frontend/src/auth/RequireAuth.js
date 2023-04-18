@@ -6,7 +6,6 @@ const RequireAuth = ({ allowedRole }) => {
   const navigate = useNavigate();
 
   const { auth } = useAuth();
-  console.log("auth", auth);
   const decoded = jwt_decode(auth);
   const userRole = decoded?.UserInfo?.role;
   const userVerified = decoded?.UserInfo?.verified;
@@ -30,6 +29,13 @@ const RequireAuth = ({ allowedRole }) => {
         break;
     }
   }, []);
+
+  useEffect(() => {
+    if (!auth) {
+      navigate("/");
+    }
+  }, [auth]);
+  
   return <Outlet />;
 };
 

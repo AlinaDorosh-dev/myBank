@@ -14,8 +14,14 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Skeleton,
 } from "@mui/material";
-import { NavigateBefore, NavigateNext } from "@mui/icons-material";
+import {
+  NavigateBefore,
+  NavigateNext,
+  CallMade,
+  CallReceived,
+} from "@mui/icons-material";
 
 import { TransactionsContext } from "../../../context/TransactionsProvider";
 import { useEffect, useState, useContext } from "react";
@@ -25,7 +31,7 @@ const TransactionsHistory = () => {
   const theme = useTheme();
 
   //retrieve transactions state
-  const { transactions, noTransactions, errMessage } =
+  const { transactions, noTransactions, errMessage, loading } =
     useContext(TransactionsContext);
 
   //states for pagination
@@ -75,7 +81,7 @@ const TransactionsHistory = () => {
       );
       rows = incomingRows
         .concat(outgoingRows)
-        .sort((a, b) => (b.date > a.date ? -1 : a.date > b.date ? 1 : 0));
+        .sort((a, b) => (a.date > b.date ? -1 : a.date > b.date ? 1 : 0));
       setRows(rows);
       setVisibleRows(rows.slice(0, 5));
     }
@@ -98,7 +104,19 @@ const TransactionsHistory = () => {
 
   return (
     <Box>
-      {noTransactions ? (
+      { visibleRows.length === 0 ? (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            mt: 10,
+          }}
+        >
+          <CircularProgress />
+          <Typography sx={{ mt: 2 }}>Loading transactions...</Typography>
+        </Box>
+      ) : noTransactions ? (
         <Typography
           color={theme.palette.primary.dark}
           sx={{ mt: 12, width: "100%", textAlign: "center" }}
@@ -114,7 +132,7 @@ const TransactionsHistory = () => {
             width: { xs: "100%", sm: "75%", md: "85%" },
             ml: { xs: 0, sm: 28, md: 15, lg: 20, xl: 25 },
             maxWidth: { sm: 580, md: 800, lg: 1000, xl: 1200 },
-            mt: 20,
+            mt: { xs: 5, sm: 20 },
             backgroundColor: theme.palette.primary.dark,
           }}
         >
@@ -178,14 +196,21 @@ const TransactionsHistory = () => {
                   ))}
                 </TableRow>
               </TableHead>
-              <TableBody sx={{}}>
+              <TableBody>
                 {visibleRows.map((row) => (
                   <TableRow key={row.id}>
                     <TableCell align='center'>{row.date}</TableCell>
                     <TableCell align='center'>{row.name}</TableCell>
                     <TableCell align='center'>{row.description}</TableCell>
                     <TableCell align='center'>{row.amount}</TableCell>
-                    <TableCell align='center'>{row.type}</TableCell>
+                    <TableCell align='center'>
+                      {/* {row.type} */}
+                      {row.type === "incoming" ? (
+                        <CallReceived sx={{ color: "#81c784" }} />
+                      ) : (
+                        <CallMade sx={{ color: "#ef5350" }} />
+                      )}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

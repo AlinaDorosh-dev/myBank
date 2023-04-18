@@ -174,7 +174,51 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Get user profile
+// @route GET auth/user/:id
+// @access Private
+const getUserProfile = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (id !== req.user.id) {
+    res.status(401).json({
+      status: "failed",
+      data: null,
+      message: "Unauthorized",
+    });
+  }
+
+  try {
+    const foundUser = await User.findById(id);
+
+    if (!req.user || !foundUser) {
+      res.status(401);
+      throw new Error("User not found");
+    }
+
+    res.status(200).json({
+      status: "succeeded",
+      data: {
+        email: foundUser.email,
+        documentType: foundUser.documentType,
+        documentNumber: foundUser.documentNumber,
+        address: foundUser.address,
+        firstName: foundUser.firstName,
+        lastName: foundUser.lastName,
+        phone: foundUser.phone,
+        birthDate: foundUser.birthDate,
+      },
+      error: null,
+    });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ status: "failed", data: null, message: error.message });
+  }
+});
+
 module.exports = {
   createNewUser,
   updateUser,
+  getUserProfile,
 };

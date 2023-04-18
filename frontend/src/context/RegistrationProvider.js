@@ -77,8 +77,7 @@ const RegistrationProvider = ({ children }) => {
   useEffect(() => {
     response?.status === "succeeded" &&
       navigate("/dashboard/account-management");
-    console.log("response?.status", response?.status);
-  }, [response?.status]);
+      }, [response?.status]);
 
   useEffect(() => {
     if (userData.firstName)
@@ -137,12 +136,9 @@ const RegistrationProvider = ({ children }) => {
             ? DNI_REGEX.test(userData.documentNumber)
             : NIE_REGEX.test(userData.documentNumber),
       });
-    console.log("inputsValidation.address", inputsValidation.address);
   }, [userData]);
 
   const handleSubmit = () => {
-    console.log("userData", userData);
-
     try {
       axiosFetch({
         axiosInstance: axiosInstance(auth),

@@ -155,7 +155,7 @@ const NotificationsTab = () => {
         >
           <Table
             sx={{
-              "& .MuiTableRow-root:nth-child(even)": {
+              "& .MuiTableRow-root:nth-of-type(even)": {
                 bgcolor: theme.palette.tableRow.even,
               },
             }}
