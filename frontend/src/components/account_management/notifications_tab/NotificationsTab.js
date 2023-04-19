@@ -46,7 +46,7 @@ const NotificationsTab = () => {
     setNoNotifications,
   } = useContext(NotificationContext);
 
-   //retrieve response, error, loading and axiosFetch from useAxios custom hook
+  //retrieve response, error, loading and axiosFetch from useAxios custom hook
   const [response, error, loading, axiosFetch] = useAxios();
 
   //states for pagination
@@ -104,8 +104,6 @@ const NotificationsTab = () => {
     const updatedNotifications = notifications.map((notification) =>
       notification._id === id ? { ...notification, read: true } : notification
     );
-
-    console.log(updatedNotifications);
     setNotifications(updatedNotifications);
   };
 

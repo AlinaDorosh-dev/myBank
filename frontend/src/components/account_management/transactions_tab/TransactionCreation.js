@@ -4,7 +4,9 @@
 import axiosInstance from "../../../api/myBankApi";
 import useAxios from "../../../hooks/useAxios";
 import useAuth from "../../../hooks/useAuth";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { AccountsContext } from "../../../context/AccountsProvider";
+import { NewTransactionContext } from "../../../context/NewTransactionProvider";
 import { IBAN_REGEX, AMOUNT_REGEX } from "../../../utils/regex";
 import {
   Button,
@@ -19,18 +21,19 @@ import {
   Alert,
 } from "@mui/material";
 
-const TransactionCreation = ({
-  accounts,
-  handleCloseForm,
-  transaction,
-  setTransaction,
-  setConfirmation,
-}) => {
+const TransactionCreation = () => {
   //retrieve auth from useAuth hook
   const { auth } = useAuth();
 
   //retrieve axios response, error, loading and axiosFetch function from useAxios hook
   const [response, error, loading, axiosFetch] = useAxios();
+
+  //retrieve accounts from AccountsContext
+  const { accounts } = useContext(AccountsContext);
+
+  //retrieve states from NewTransactionContext
+  const { handleCloseForm, transaction, setTransaction, setConfirmation } =
+    useContext(NewTransactionContext);
 
   //function for validate the destination account on the server
   const validateDestinationAcc = async () => {
@@ -84,8 +87,7 @@ const TransactionCreation = ({
   const ibanTest = () =>
     IBAN_REGEX.test(transaction.destinationAccount.replace(/ /g, ""));
 
-   const amountTest = () =>
-    AMOUNT_REGEX.test(transaction.amount);
+  const amountTest = () => AMOUNT_REGEX.test(transaction.amount);
 
   //handle proceed to transaction confirmation
   const handleNewTransaction = async () => {
@@ -130,7 +132,7 @@ const TransactionCreation = ({
 
   //handle for selecing source account
   const handleSelectChange = (e) => {
-    const account = accounts.find((account) => account._id === e.target.value);
+    const account = accounts?.find((account) => account._id === e.target.value);
     setTransaction({
       ...transaction,
       sourceAccountId: e.target.value,
@@ -141,7 +143,6 @@ const TransactionCreation = ({
   //handle input change
   const handleInputChange = (e) => {
     if (e.target.name === "amount") {
-      console.log(Number(e.target.value).toFixed(2));
       setTransaction({
         ...transaction,
         [e.target.name]: Number(e.target.value).toFixed(2),
@@ -152,6 +153,7 @@ const TransactionCreation = ({
       [e.target.name]: e.target.value,
     });
   };
+  console.log(accounts);
 
   return (
     <>
@@ -192,7 +194,7 @@ const TransactionCreation = ({
           label='Source Account'
           onChange={(e) => handleSelectChange(e)}
         >
-          {accounts.map((account) => {
+          {accounts?.map((account) => {
             return (
               <MenuItem
                 key={account._id}
@@ -208,7 +210,7 @@ const TransactionCreation = ({
                     fontWeight: "bold",
                   }}
                 >
-                  {account.balance} €
+                  {account.balance.toFixed(2)} €
                 </Typography>
               </MenuItem>
             );

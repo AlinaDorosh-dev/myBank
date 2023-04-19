@@ -1,33 +1,19 @@
 /**
  * @fileoverview This component is the parent component for the transaction creation and confirmation components
-*/
+ */
 
 import TransactionCreation from "./TransactionCreation";
 import TransactionConfirmation from "./TransactionConfirmation";
-import { Fade, Modal, Box, Backdrop, CircularProgress } from "@mui/material";
+import { Fade, Modal, Box, Backdrop } from "@mui/material";
 import { modalStyle } from "../../../styles/modalStyle";
-import { useState } from "react";
+import { useContext } from "react";
+import { NewTransactionContext } from "../../../context/NewTransactionProvider";
 
-export const initialTransactionState = {
-  sourceAccountId: "",
-  sourceAccountBalance: 0,
-  destinationAccount: "",
-  destinationAccountId: "",
-  beneficiaryName: "",
-  validDestinationAcc: false,
-  amount: "",
-  description: "",
-  errMsg: "",
-};
-
-const NewTransactionForm = ({ openForm, handleCloseForm, accounts }) => {
-
-  //state for confirmation modal
-  const [confirmation, setConfirmation] = useState(false);
-
-  //state for transaction
-  const [transaction, setTransaction] = useState(initialTransactionState);
-
+const NewTransactionForm = () => {
+  //retrieve states from NewTransactionContext
+  const { openForm, handleCloseForm, confirmation } = useContext(
+    NewTransactionContext
+  );
   return (
     <Modal
       aria-labelledby='transition-modal-title'
@@ -44,23 +30,8 @@ const NewTransactionForm = ({ openForm, handleCloseForm, accounts }) => {
     >
       <Fade in={openForm}>
         <Box sx={modalStyle}>
-          {!confirmation && (
-            <TransactionCreation
-              accounts={accounts}
-              handleCloseForm={handleCloseForm}
-              transaction={transaction}
-              setTransaction={setTransaction}
-              setConfirmation={setConfirmation}
-            />
-          )}
-          {confirmation && (
-            <TransactionConfirmation
-              transaction={transaction}
-              setTransaction={setTransaction}
-              handleCloseForm={handleCloseForm}
-              setConfirmation={setConfirmation}
-            />
-          )}
+          {!confirmation && <TransactionCreation />}
+          {confirmation && <TransactionConfirmation />}
         </Box>
       </Fade>
     </Modal>

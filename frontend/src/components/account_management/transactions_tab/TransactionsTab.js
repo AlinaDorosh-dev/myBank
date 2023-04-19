@@ -2,18 +2,15 @@
  * @fileoverview This file contains the TransactionsTab component which is a tab in the AccountManagement component. It contains the NewTransactionForm component and the TransactionsHistory component.
  */
 import { Button } from "@mui/material";
-import { useState } from "react";
 import NewTransactionForm from "./NewTransactionForm";
 import TransactionsHistory from "./TransactionsHistory";
 import TransactionsProvider from "../../../context/TransactionsProvider";
+import { useContext } from "react";
+import { NewTransactionContext } from "../../../context/NewTransactionProvider";
 
-const TransactionsTab = ({ accounts }) => {
-  //state for modal
-  const [openForm, setOpenForm] = useState(false);
-
-  //handle modal open and close
-  const handleOpenForm = () => setOpenForm(true);
-  const handleCloseForm = () => setOpenForm(false);
+const TransactionsTab = () => {
+  //retrieve states from NewTransactionContext
+  const { handleOpenForm } = useContext(NewTransactionContext);
   return (
     <>
       <Button
@@ -30,13 +27,7 @@ const TransactionsTab = ({ accounts }) => {
         Transfer money
       </Button>
       <TransactionsProvider>
-        <NewTransactionForm
-          openForm={openForm}
-          setOpenForm={setOpenForm}
-          handleOpenForm={handleOpenForm}
-          handleCloseForm={handleCloseForm}
-          accounts={accounts}
-        />
+        <NewTransactionForm />
         <TransactionsHistory />
       </TransactionsProvider>
     </>

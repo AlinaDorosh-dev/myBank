@@ -6,7 +6,8 @@
 import axiosInstance from "../../../api/myBankApi";
 import useAxios from "../../../hooks/useAxios";
 import useAuth from "../../../hooks/useAuth";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { AccountsContext } from "../../../context/AccountsProvider";
 import {
   Button,
   Typography,
@@ -20,7 +21,11 @@ import {
 import { NEW_ACCOUNT_URL } from "../../../api/config";
 import { modalStyle } from "../../../styles/modalStyle";
 
-const NewAccountBtn = ({ accounts, setTotalBalance, setAccounts }) => {
+const NewAccountBtn = () => {
+
+  //retrieve accounts, setTotalBalance and setAccounts from AccountsContext
+  const { accounts, setTotalBalance, setAccounts } =
+    useContext(AccountsContext);
 
   //retrieve axios response, error, loading and axiosFetch function from useAxios hook
   const [response, error, loading, axiosFetch] = useAxios();
@@ -54,15 +59,13 @@ const NewAccountBtn = ({ accounts, setTotalBalance, setAccounts }) => {
     }
   }, [accounts]);
 
-
   //handle modal open and close
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
   //handle new account creation
   const handleNewAccount = async () => {
-
-        //prevent multiple requests
+    //prevent multiple requests
     if (loading) return;
 
     //prevent user from creating more than 3 accounts
@@ -84,7 +87,7 @@ const NewAccountBtn = ({ accounts, setTotalBalance, setAccounts }) => {
       method: "POST",
       url: NEW_ACCOUNT_URL,
     });
-    
+
     //show alert
     setOpenAlert(true);
     setTimeout(() => {

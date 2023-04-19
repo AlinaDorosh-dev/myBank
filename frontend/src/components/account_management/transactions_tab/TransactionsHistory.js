@@ -31,7 +31,7 @@ const TransactionsHistory = () => {
   const theme = useTheme();
 
   //retrieve transactions state
-  const { transactions, noTransactions, errMessage, loading } =
+  const { transactions, noTransactions, errMessage } =
     useContext(TransactionsContext);
 
   //states for pagination
@@ -104,19 +104,10 @@ const TransactionsHistory = () => {
 
   return (
     <Box>
-      { visibleRows.length === 0 ? (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            mt: 10,
-          }}
-        >
-          <CircularProgress />
-          <Typography sx={{ mt: 2 }}>Loading transactions...</Typography>
-        </Box>
-      ) : noTransactions ? (
+      {rows.length === 0 && !noTransactions && !errMessage && (
+        <CircularProgress />
+      )}
+      {noTransactions ? (
         <Typography
           color={theme.palette.primary.dark}
           sx={{ mt: 12, width: "100%", textAlign: "center" }}

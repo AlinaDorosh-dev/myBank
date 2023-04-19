@@ -4,15 +4,26 @@
  */
 
 import NewAccountBtn from "./NewAccountBtn";
-import { Box, Paper, Typography } from "@mui/material";
-import { useState, useEffect } from "react";
+import { Box, Paper, Typography, Alert } from "@mui/material";
+import { useState, useEffect, useContext } from "react";
 import axiosInstance from "../../../api/myBankApi";
 import useAxios from "../../../hooks/useAxios";
 import useAuth from "../../../hooks/useAuth";
 import { ACCOUNTS_URL } from "../../../api/config";
 import { useTheme } from "@mui/material/styles";
+import { AccountsContext } from "../../../context/AccountsProvider";
 
-const AccountsTab = ({ accounts, setAccounts }) => {
+const AccountsTab = () => {
+  //retrieve accounts state and setAccounts function from AccountsContext
+  const {
+    accounts,
+    setAccounts,
+    totalBalance,
+    setTotalBalance,
+    noAccounts,
+    setNoAccounts,
+  } = useContext(AccountsContext);
+
   //retrieve auth state
   const { auth } = useAuth();
 
@@ -20,12 +31,6 @@ const AccountsTab = ({ accounts, setAccounts }) => {
   const [response, error, loading, axiosFetch] = useAxios();
 
   const theme = useTheme();
-
-  //state for total balance
-  const [totalBalance, setTotalBalance] = useState(0);
-
-  //state for displaying alert when there are no accounts
-  const [noAccounts, setNoAccounts] = useState(false);
 
   //fetch accounts when component mounts
   useEffect(() => {
@@ -51,6 +56,7 @@ const AccountsTab = ({ accounts, setAccounts }) => {
   useEffect(() => {
     if (accounts.length) setNoAccounts(false);
   }, [accounts]);
+
   return (
     <Box
       sx={{
@@ -84,11 +90,7 @@ const AccountsTab = ({ accounts, setAccounts }) => {
                 {totalBalance}€
               </Typography>
             </Paper>
-            <NewAccountBtn
-              accounts={accounts}
-              setTotalBalance={setTotalBalance}
-              setAccounts={setAccounts}
-            />
+            <NewAccountBtn />
           </Box>
           {!loading && accounts.length > 0 && (
             <>
@@ -124,14 +126,14 @@ const AccountsTab = ({ accounts, setAccounts }) => {
                       variant='subtitle2'
                       color={theme.palette.primary.dark}
                     >
-                      {account.balance}€
+                      {account.balance.toFixed(2)}€
                     </Typography>
                   </Paper>
                 ))}
               </Box>
             </>
           )}
-          {noAccounts && (
+          {noAccounts && !error && (
             <Typography
               color={theme.palette.primary.dark}
               sx={{ mt: 12, width: "100%", textAlign: "center" }}
@@ -139,6 +141,15 @@ const AccountsTab = ({ accounts, setAccounts }) => {
             >
               You have no account yet. Open one.
             </Typography>
+          )}
+
+          {error && (
+            <Alert
+              severity='error'
+              sx={{ mt: 12, width: "100%", textAlign: "center" }}
+            >
+              Error occured in loading accounts. Please reload the app.
+            </Alert>
           )}
         </>
       )}

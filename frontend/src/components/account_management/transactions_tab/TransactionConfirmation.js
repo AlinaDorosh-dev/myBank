@@ -8,25 +8,32 @@ import {
   CircularProgress,
   Alert,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import axiosInstance from "../../../api/myBankApi";
 import useAxios from "../../../hooks/useAxios";
 import useAuth from "../../../hooks/useAuth";
 import { useEffect, useState, useContext } from "react";
-import { useTheme } from "@mui/material/styles";
-import { initialTransactionState } from "./NewTransactionForm";
+import { AccountsContext } from "../../../context/AccountsProvider";
+import { NewTransactionContext } from "../../../context/NewTransactionProvider";
 import { TransactionsContext } from "../../../context/TransactionsProvider";
 
-const TransactionConfirmation = ({
-  transaction,
-  setTransaction,
-  handleCloseForm,
-  setConfirmation,
-}) => {
+const TransactionConfirmation = () => {
   //retrieve auth from useAuth hook
   const { auth } = useAuth();
 
   //retrieve transactions state
   const { setTransactions } = useContext(TransactionsContext);
+
+  const {
+    transaction,
+    setTransaction,
+    handleCloseForm,
+    setConfirmation,
+    initialTransactionState,
+  } = useContext(NewTransactionContext);
+
+  //retrieve accounts state
+  const { accounts, setAccounts } = useContext(AccountsContext);
 
   //retrieve axios response, error, loading and axiosFetch function from useAxios hook
   const [response, error, loading, axiosFetch] = useAxios();
@@ -53,6 +60,7 @@ const TransactionConfirmation = ({
 
   //update alert state when response or error changes
   useEffect(() => {
+    console.log("accounts", accounts);
     if (response?.data || error) {
       setOpenAlert(true);
     }
@@ -64,6 +72,14 @@ const TransactionConfirmation = ({
           outgoingTransactions: [...prev.outgoingTransactions, response.data],
         };
       });
+
+      //Update the balance of the source account after transaction
+      const updatedAccounts = accounts.map((acc) =>
+        acc._id === transaction.sourceAccountId
+          ? { ...acc, balance: acc.balance - transaction.amount }
+          : acc
+      );
+      setAccounts(updatedAccounts);
     }
   }, [response, error]);
 
@@ -73,6 +89,7 @@ const TransactionConfirmation = ({
     setTimeout(() => {
       setConfirmation(false);
       setOpenAlert(false);
+      //reset transaction state
       setTransaction(initialTransactionState);
     }, 200);
   };

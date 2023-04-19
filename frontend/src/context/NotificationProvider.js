@@ -25,7 +25,6 @@ const NotificationProvider = ({ children }) => {
         (a, b) => new Date(b.date) - new Date(a.date)
       );
       setNotifications(sortedNotifications);
-      console.log(response.data);
     }
     if (response?.data?.length === 0) {
       setNoNotifications(true);
