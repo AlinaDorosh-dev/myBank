@@ -10,13 +10,12 @@ import {
   Select,
   MenuItem,
   FormControl,
-  Fab,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import HorizontalLinearStepper from "./HorizontalLinearStepper";
-import { RegistrationContext } from "../../context/RegistrationProvider";
+import { RegistrationContext } from "../../../context/RegistrationProvider";
 import { useContext } from "react";
 
 const RegisterForm = () => {
@@ -25,7 +24,6 @@ const RegisterForm = () => {
     userData,
     setUserData,
     inputsValidation,
-    setInputsValidation,
     inputFocus,
     setInputFocus,
   } = useContext(RegistrationContext);

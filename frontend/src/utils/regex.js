@@ -11,7 +11,7 @@ export const PWD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,24}$/;
 
 //Regex for validate phone
-export const PHONE_REGEX = /^\d{9}$/;
+export const PHONE_REGEX = /^(6|7|8)\d{8}$/;
 
 //Regex for validate DNI
 export const DNI_REGEX = /^\d{8}[a-zA-Z]$/;

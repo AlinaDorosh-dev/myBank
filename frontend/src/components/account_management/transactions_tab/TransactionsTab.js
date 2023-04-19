@@ -2,8 +2,8 @@
  * @fileoverview This file contains the TransactionsTab component which is a tab in the AccountManagement component. It contains the NewTransactionForm component and the TransactionsHistory component.
  */
 import { Button } from "@mui/material";
-import NewTransactionForm from "./NewTransactionForm";
-import TransactionsHistory from "./TransactionsHistory";
+import NewTransactionForm from "./new_transaction/NewTransactionForm";
+import TransactionsHistory from "./transactions_history/TransactionsHistory";
 import TransactionsProvider from "../../../context/TransactionsProvider";
 import { useContext } from "react";
 import { NewTransactionContext } from "../../../context/NewTransactionProvider";

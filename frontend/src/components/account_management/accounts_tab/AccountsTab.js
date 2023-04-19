@@ -77,7 +77,7 @@ const AccountsTab = () => {
               p: { sm: 3 },
             }}
           >
-            <Paper
+          { accounts.length>0 ? <Paper
               variant='elevation'
               elevation={3}
               sx={{ p: 1, textAlign: "center" }}
@@ -89,7 +89,13 @@ const AccountsTab = () => {
                 Total balance:
                 {totalBalance}€
               </Typography>
-            </Paper>
+            </Paper> : <Typography
+            sx={{
+              fontWeight: "bold",
+              color: theme.palette.text.main,
+            }}
+            >It's all about the money...
+            </Typography>}
             <NewAccountBtn />
           </Box>
           {!loading && accounts.length > 0 && (
@@ -136,7 +142,7 @@ const AccountsTab = () => {
           {noAccounts && !error && (
             <Typography
               color={theme.palette.primary.dark}
-              sx={{ mt: 12, width: "100%", textAlign: "center" }}
+              sx={{ p: 2, mt: 12, width: "100%", textAlign: "center" }}
               variant='h5'
             >
               You have no account yet. Open one.

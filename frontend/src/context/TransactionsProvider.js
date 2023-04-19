@@ -31,10 +31,17 @@ const TransactionsProvider = ({ children }) => {
     if (response?.data) {
       setTransactions(response.data);
     }
-    if (response?.data?.length === 0) {
+    if (
+      response?.data?.incomingTransactions.length === 0 &&
+      response?.data?.outgoingTransactions.length === 0
+    ) {
       setNoTransactions(true);
     }
   }, [response.data]);
+
+  useEffect(() => {
+    if (transactions.length) setNoTransactions(false);
+  }, [transactions]);
 
   //set error message when error is received
   useEffect(() => {

@@ -22,7 +22,6 @@ import { NEW_ACCOUNT_URL } from "../../../api/config";
 import { modalStyle } from "../../../styles/modalStyle";
 
 const NewAccountBtn = () => {
-
   //retrieve accounts, setTotalBalance and setAccounts from AccountsContext
   const { accounts, setTotalBalance, setAccounts } =
     useContext(AccountsContext);
@@ -121,7 +120,16 @@ const NewAccountBtn = () => {
       >
         <Fade in={openModal}>
           <Box sx={modalStyle}>
-            {loading && <CircularProgress />}
+            {loading && (
+              <CircularProgress
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "45%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              />
+            )}
             {!openAlert && !loading && (
               <>
                 <Typography

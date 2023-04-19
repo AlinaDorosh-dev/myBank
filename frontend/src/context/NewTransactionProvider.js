@@ -6,6 +6,9 @@ const NewTransactionProvider = ({ children }) => {
   //state for modal
   const [openForm, setOpenForm] = useState(false);
 
+  //state for confirmation modal
+  const [confirmation, setConfirmation] = useState(false);
+
   const initialTransactionState = {
     sourceAccountId: "",
     sourceAccountBalance: 0,
@@ -17,9 +20,6 @@ const NewTransactionProvider = ({ children }) => {
     description: "",
     errMsg: "",
   };
-
-  //state for confirmation modal
-  const [confirmation, setConfirmation] = useState(false);
 
   //state for transaction
   const [transaction, setTransaction] = useState(initialTransactionState);

@@ -5,9 +5,9 @@
 import TransactionCreation from "./TransactionCreation";
 import TransactionConfirmation from "./TransactionConfirmation";
 import { Fade, Modal, Box, Backdrop } from "@mui/material";
-import { modalStyle } from "../../../styles/modalStyle";
+import { modalStyle } from "../../../../styles/modalStyle";
 import { useContext } from "react";
-import { NewTransactionContext } from "../../../context/NewTransactionProvider";
+import { NewTransactionContext } from "../../../../context/NewTransactionProvider";
 
 const NewTransactionForm = () => {
   //retrieve states from NewTransactionContext

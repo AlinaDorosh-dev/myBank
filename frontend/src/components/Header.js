@@ -21,23 +21,19 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import { useState, useContext } from "react";
-import AuthContext from "../context/AuthProvider";
+import { useState } from "react";
 
 const drawerWidth = 240;
 
 function Header(props) {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { auth: myauth } = useContext(AuthContext);
-  const { log } = console;
+
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
   const [confirmLogout, setConfirmLogout] = useState(false);
 
   const { auth, setAuth } = useAuth();
-  log("auth", auth);
-  log("myauth", myauth);
 
   const navItems = [
     {
@@ -64,6 +60,7 @@ function Header(props) {
   const handleLogout = () => {
     setConfirmLogout(false);
     setAuth("");
+    sessionStorage.removeItem("auth");
     navigate("/");
   };
 
@@ -118,7 +115,11 @@ function Header(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button variant='outlined' autoFocus onClick={() => setConfirmLogout(false)}>
+          <Button
+            variant='outlined'
+            autoFocus
+            onClick={() => setConfirmLogout(false)}
+          >
             Cancel
           </Button>
           <Button

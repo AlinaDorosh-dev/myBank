@@ -38,6 +38,8 @@ const NotificationProvider = ({ children }) => {
         setNotifications,
         noNotifications,
         setNoNotifications,
+        error, 
+        loading,
       }}
     >
       {children}

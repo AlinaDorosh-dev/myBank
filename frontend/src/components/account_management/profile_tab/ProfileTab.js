@@ -64,31 +64,29 @@ const ProfileTab = () => {
       <Typography variant='h4' textAlign={"center"} sx={{ mb: 2 }}>
         Profile information
       </Typography>
+      {loading ? (
+        <CircularProgress
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: " translate(-50%, -50%)",
+          }}
+        />
+      ) : (
+        <Paper
+          elevation={3}
+          sx={{
+            width: { xs: "95%", sm: "60%" },
+            maxWidth: 500,
+            textAlign: "center",
 
-      <Paper
-        elevation={3}
-        sx={{
-          width: { xs: "95%", sm: "60%" },
-          maxWidth: 500,
-          textAlign: "center",
-
-          p: 2,
-          ml: { xs: "auto", sm: 30, md: "auto" },
-          mr: { xs: "auto" },
-        }}
-      >
-        {loading && (
-          <CircularProgress
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: " translate(-50%, -50%)",
-            }}
-          />
-        )}
-        {!loading &&
-          fields.map((field) => (
+            p: 4,
+            ml: { xs: "auto", sm: 30, md: "auto" },
+            mr: { xs: "auto" },
+          }}
+        >
+          {fields.map((field) => (
             <Box
               key={field.label}
               sx={{
@@ -111,7 +109,8 @@ const ProfileTab = () => {
               <Typography variant='body1'>{field.value}</Typography>
             </Box>
           ))}
-      </Paper>
+        </Paper>
+      )}
     </Box>
   );
 };

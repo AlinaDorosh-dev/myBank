@@ -51,6 +51,7 @@ const LoginForm = () => {
   useEffect(() => {
     if (data?.accessToken) {
       setAuth(data.accessToken);
+      sessionStorage.setItem("auth", data.accessToken);
     }
     resetLoginState();
   }, [data.accessToken]);

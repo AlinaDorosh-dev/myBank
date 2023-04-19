@@ -10,7 +10,7 @@ import {
   Typography,
   Alert,
 } from "@mui/material";
-import { RegistrationContext } from "../../context/RegistrationProvider";
+import { RegistrationContext } from "../../../context/RegistrationProvider";
 import { useContext, useEffect, useState } from "react";
 
 export default function HorizontalLinearStepper() {
@@ -20,7 +20,8 @@ export default function HorizontalLinearStepper() {
     steps,
     userData,
     handleSubmit,
-    inputsValidation,
+    showAlert,
+    alertMessage,
   } = useContext(RegistrationContext);
 
   const handleNext = () => {
@@ -31,25 +32,11 @@ export default function HorizontalLinearStepper() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const [invalidFields, setInvalidFields] = useState([]);
+ 
   const [disableStepTwo, setDisableStepTwo] = useState(true);
   const [disableStepThree, setDisableStepThree] = useState(true);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-
-  useEffect(() => {
-    let invalidFields = Object.entries(inputsValidation).filter(
-      ([key, value]) => value === false
-    );
-    setInvalidFields(invalidFields);
-  }, [inputsValidation]);
-
-  useEffect(() => {
-    //Anytime userData changes remove alert
-    setShowAlert(false);
-    setAlertMessage("");
-    console.log("userData", userData);
-  }, [userData]);
+  const [disableSubmit, setDisableSubmit] = useState(true);
+ 
 
   useEffect(() => {
     if (
@@ -72,6 +59,12 @@ export default function HorizontalLinearStepper() {
       setDisableStepThree(false);
     }
   }, [userData.address, userData.city, userData.zipCode]);
+
+  useEffect(() => {
+    if (userData.documentType && userData.documentNumber) {
+      setDisableSubmit(false);
+    }
+  },[userData.documentType, userData.documentNumber])
 
   return (
     <Box sx={{ width: "100%", mt: 1 }}>
@@ -131,7 +124,7 @@ export default function HorizontalLinearStepper() {
             {activeStep === 2 && (
               <Button
                 variant='outlined'
-                disabled={invalidFields.length > 0}
+                disabled={disableSubmit}
                 onClick={() => handleSubmit()}
               >
                 Finish

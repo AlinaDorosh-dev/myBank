@@ -81,6 +81,7 @@ const SignUpForm = () => {
     if (response?.accessToken) {
       setAuth(response.accessToken);
     }
+    sessionStorage.setItem("auth", response?.accessToken);
     dispatch({ type: SIGN_UP.RESTORE_STATE });
   }, [response]);
 

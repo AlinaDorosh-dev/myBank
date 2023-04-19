@@ -9,13 +9,13 @@ import {
   Alert,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import axiosInstance from "../../../api/myBankApi";
-import useAxios from "../../../hooks/useAxios";
-import useAuth from "../../../hooks/useAuth";
+import axiosInstance from "../../../../api/myBankApi";
+import useAxios from "../../../../hooks/useAxios";
+import useAuth from "../../../../hooks/useAuth";
 import { useEffect, useState, useContext } from "react";
-import { AccountsContext } from "../../../context/AccountsProvider";
-import { NewTransactionContext } from "../../../context/NewTransactionProvider";
-import { TransactionsContext } from "../../../context/TransactionsProvider";
+import { AccountsContext } from "../../../../context/AccountsProvider";
+import { NewTransactionContext } from "../../../../context/NewTransactionProvider";
+import { TransactionsContext } from "../../../../context/TransactionsProvider";
 
 const TransactionConfirmation = () => {
   //retrieve auth from useAuth hook

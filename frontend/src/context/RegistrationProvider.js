@@ -45,6 +45,39 @@ const RegistrationProvider = ({ children }) => {
     documentNumber: false,
   });
 
+  const [invalidFields, setInvalidFields] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
+  useEffect(() => {
+    let invalidFields = Object.entries(inputsValidation).filter(
+      ([key, value]) => value === false
+    );
+    setInvalidFields(invalidFields);
+  }, [inputsValidation]);
+
+  useEffect(() => {
+    setAlertMessage("");
+    setShowAlert(false);
+  }, [userData]);
+
+  const instructions = {
+    firstName:
+      "Please enter your first name. Note: it should start with a capital letter.",
+    lastName:
+      "Please enter your last name. Note: it should start with a capital letter.",
+    phone:
+      "Please enter your phone number. Note: it should start with a 6, 7 or 8 and have 9 digits.",
+    birthDate:
+      "Please enter your birth date. Note: you must be over 18 years old.",
+    address:
+      "Please enter your address. Note: it should have at least 5 characters.",
+    city: "Please enter your city. Note: it should have at least 3 characters.",
+    zipCode: "Please enter your zip code. Note: it should have 5 digits.",
+    documentType: "Please select your document type.",
+    documentNumber: "Please enter valid document number.",
+  };
+
   const [inputFocus, setInputFocus] = useState({
     firstName: false,
     lastName: false,
@@ -77,7 +110,7 @@ const RegistrationProvider = ({ children }) => {
   useEffect(() => {
     response?.status === "succeeded" &&
       navigate("/dashboard/account-management");
-      }, [response?.status]);
+  }, [response?.status]);
 
   useEffect(() => {
     if (userData.firstName)
@@ -138,28 +171,33 @@ const RegistrationProvider = ({ children }) => {
       });
   }, [userData]);
 
-  const handleSubmit = () => {
-    try {
-      axiosFetch({
-        axiosInstance: axiosInstance(auth),
-        method: "PATCH",
-        url: `/auth/user/${userId}`,
-        requestConfig: {
-          firstName,
-          lastName,
-          phone,
-          birthDate: new Date(birthDate).toISOString(),
-          address: {
-            address,
-            city,
-            zipCode,
-          },
-          documentType,
-          documentNumber,
+  const updateUserData = () => {
+    axiosFetch({
+      axiosInstance: axiosInstance(auth),
+      method: "PATCH",
+      url: `/auth/user/${userId}`,
+      requestConfig: {
+        firstName,
+        lastName,
+        phone,
+        birthDate: new Date(birthDate).toISOString(),
+        address: {
+          address,
+          city,
+          zipCode,
         },
-      });
-    } catch (error) {
-      console.log(error);
+        documentType,
+        documentNumber,
+      },
+    });
+  };
+
+  const handleSubmit = () => {
+    if (invalidFields.length === 0) {
+      updateUserData();
+    } else {
+      setShowAlert(true);
+      setAlertMessage(instructions[invalidFields[0][0]]);
     }
   };
   return (
@@ -175,6 +213,8 @@ const RegistrationProvider = ({ children }) => {
         inputFocus,
         setInputFocus,
         handleSubmit,
+        showAlert,
+        alertMessage,
       }}
     >
       {children}

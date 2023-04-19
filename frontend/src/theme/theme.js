@@ -18,6 +18,9 @@ const theme = createTheme({
     tableRow: {
       even: grey[200],
     },
+    text:{
+      main: grey[800],
+    }
   
   },
   typography: {

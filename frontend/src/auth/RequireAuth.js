@@ -35,7 +35,7 @@ const RequireAuth = ({ allowedRole }) => {
       navigate("/");
     }
   }, [auth]);
-  
+
   return <Outlet />;
 };
 

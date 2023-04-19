@@ -1,13 +1,13 @@
 /**
  * @fileoverview This file contains the TransactionCreation component. This component is used to create a new transaction.
  */
-import axiosInstance from "../../../api/myBankApi";
-import useAxios from "../../../hooks/useAxios";
-import useAuth from "../../../hooks/useAuth";
+import axiosInstance from "../../../../api/myBankApi";
+import useAxios from "../../../../hooks/useAxios";
+import useAuth from "../../../../hooks/useAuth";
 import { useEffect, useState, useContext } from "react";
-import { AccountsContext } from "../../../context/AccountsProvider";
-import { NewTransactionContext } from "../../../context/NewTransactionProvider";
-import { IBAN_REGEX, AMOUNT_REGEX } from "../../../utils/regex";
+import { AccountsContext } from "../../../../context/AccountsProvider";
+import { NewTransactionContext } from "../../../../context/NewTransactionProvider";
+import { IBAN_REGEX, AMOUNT_REGEX } from "../../../../utils/regex";
 import {
   Button,
   Typography,

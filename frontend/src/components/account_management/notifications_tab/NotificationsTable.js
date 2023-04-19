@@ -1,12 +1,7 @@
-/**
- * @fileoverview This file contains the TransactionsHistory component. This component is used to display users transactions history
- */
 import {
   Typography,
   Box,
   Button,
-  CircularProgress,
-  Alert,
   Paper,
   Table,
   TableBody,
@@ -14,25 +9,33 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Skeleton,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
 import {
   NavigateBefore,
   NavigateNext,
-  CallMade,
-  CallReceived,
+  MarkEmailRead,
+  MarkunreadMailbox,
 } from "@mui/icons-material";
-
-import { TransactionsContext } from "../../../context/TransactionsProvider";
+import axiosInstance from "../../../api/myBankApi";
+import useAxios from "../../../hooks/useAxios";
+import useAuth from "../../../hooks/useAuth";
 import { useEffect, useState, useContext } from "react";
 import { useTheme } from "@mui/material/styles";
+import { NotificationContext } from "../../../context/NotificationProvider";
 
-const TransactionsHistory = () => {
+const NotificationsTable = () => {
   const theme = useTheme();
 
-  //retrieve transactions state
-  const { transactions, noTransactions, errMessage } =
-    useContext(TransactionsContext);
+  //retrieve auth state
+  const { auth } = useAuth();
+
+  //retrieve notifications state
+  const { notifications, setNotifications } = useContext(NotificationContext);
+
+  //retrieve response, error, loading and axiosFetch from useAxios custom hook
+  const [response, error, loading, axiosFetch] = useAxios();
 
   //states for pagination
   const [page, setPage] = useState(0);
@@ -41,53 +44,30 @@ const TransactionsHistory = () => {
 
   const COLUMNS = [
     { field: "date", headerName: "Date" },
-    { field: "remitent/receiver", headerName: "Remitent/Receiver" },
-    { field: "description", headerName: "Description" },
-    { field: "amount", headerName: "Amount" },
-    { field: "type", headerName: "Type" },
+    { field: "message", headerName: "Message" },
+    { field: "read", headerName: "Read" },
   ];
 
-  //reformat transactions data for table
+  //Reformat notifications data to be displayed in table
   useEffect(() => {
     let rows = [];
-
-    if (
-      transactions?.incomingTransactions ||
-      transactions?.outgoingTransactions
-    ) {
-      const incomingRows = transactions?.incomingTransactions?.map(
-        (transaction) => {
-          return {
-            id: transaction._id,
-            date: new Date(transaction.date).toLocaleDateString(),
-            name: `${transaction.sourceAcc.user.firstName} ${transaction.sourceAcc.user.lastName}`,
-            description: transaction.description,
-            amount: `${transaction.amount} €`,
-            type: "incoming",
-          };
-        }
-      );
-      const outgoingRows = transactions?.outgoingTransactions?.map(
-        (transaction) => {
-          return {
-            id: transaction._id,
-            date: new Date(transaction.date).toLocaleDateString(),
-            name: `${transaction.destinationAcc.user.firstName} ${transaction.destinationAcc.user.lastName}`,
-            description: transaction.description,
-            amount: `${transaction.amount} €`,
-            type: "outgoing",
-          };
-        }
-      );
-      rows = incomingRows
-        .concat(outgoingRows)
-        .sort((a, b) => (a.date > b.date ? -1 : a.date > b.date ? 1 : 0));
+    if (notifications?.length === 0) return;
+    if (notifications?.length > 0) {
+      const recievedMsgs = notifications?.map((notification) => {
+        return {
+          id: notification._id,
+          date: new Date(notification.date).toLocaleDateString(),
+          message: notification.message,
+          read: notification.read,
+        };
+      });
+      rows = recievedMsgs.sort((a, b) => b.date - a.date);
       setRows(rows);
       setVisibleRows(rows.slice(0, 5));
     }
-  }, [transactions?.incomingTransactions, transactions?.outgoingTransactions]);
+  }, [notifications]);
 
-  //handle pagination
+  //functions for handling pagination
   const handleNextPage = () => {
     if (page < rows.length / 5 - 1) {
       setPage(page + 1);
@@ -102,28 +82,28 @@ const TransactionsHistory = () => {
     }
   };
 
+  //function for handling marking notifications as read
+  const handleMarkAsRead = (id) => {
+    axiosFetch({
+      axiosInstance: axiosInstance(auth),
+      method: "PATCH",
+      url: `/notifications/${id}`,
+    });
+    const updatedNotifications = notifications.map((notification) =>
+      notification._id === id ? { ...notification, read: true } : notification
+    );
+    setNotifications(updatedNotifications);
+  };
+
   return (
-    <Box>
-      {rows.length === 0 && !noTransactions && !errMessage && (
-        <CircularProgress />
-      )}
-      {noTransactions ? (
-        <Typography
-          color={theme.palette.primary.dark}
-          sx={{ mt: 12, width: "100%", textAlign: "center" }}
-          variant='h5'
-        >
-          You don't have any transactions yet. Make your first transaction now!
-        </Typography>
-      ) : errMessage ? (
-        <Alert severity='error'>{errMessage}</Alert>
-      ) : (
+    <>
+      {visibleRows.length > 0 ? (
         <Paper
           sx={{
             width: { xs: "100%", sm: "75%", md: "85%" },
             ml: { xs: 0, sm: 28, md: 15, lg: 20, xl: 25 },
             maxWidth: { sm: 580, md: 800, lg: 1000, xl: 1200 },
-            mt: { xs: 5, sm: 20 },
+            mt: 20,
             backgroundColor: theme.palette.primary.dark,
           }}
         >
@@ -145,7 +125,7 @@ const TransactionsHistory = () => {
                 color: "white",
               }}
             >
-              TRANSACTIONS HISTORY
+              NOTIFICATIONS
             </Typography>
             <Button
               onClick={handleNextPage}
@@ -154,7 +134,6 @@ const TransactionsHistory = () => {
               <NavigateNext fontSize='large' sx={{ color: "white" }} />
             </Button>
           </Box>
-
           <TableContainer
             component={Box}
             sx={{
@@ -168,12 +147,8 @@ const TransactionsHistory = () => {
                 },
               }}
             >
-              <TableHead
-                sx={{
-                  backgroundColor: theme.palette.primary.dark,
-                }}
-              >
-                <TableRow>
+              <TableHead>
+                <TableRow sx={{ backgroundColor: theme.palette.primary.dark }}>
                   {COLUMNS.map((column) => (
                     <TableCell
                       key={column.field}
@@ -190,16 +165,39 @@ const TransactionsHistory = () => {
               <TableBody>
                 {visibleRows.map((row) => (
                   <TableRow key={row.id}>
-                    <TableCell align='center'>{row.date}</TableCell>
-                    <TableCell align='center'>{row.name}</TableCell>
-                    <TableCell align='center'>{row.description}</TableCell>
-                    <TableCell align='center'>{row.amount}</TableCell>
+                    <TableCell
+                      align='center'
+                      sx={{
+                        fontWeight: row.read ? "normal" : "bold",
+                      }}
+                    >
+                      {row.date}
+                    </TableCell>
+                    <TableCell
+                      align='center'
+                      sx={{
+                        fontWeight: row.read ? "normal" : "bold",
+                      }}
+                    >
+                      {row.message}
+                    </TableCell>
                     <TableCell align='center'>
-                      {/* {row.type} */}
-                      {row.type === "incoming" ? (
-                        <CallReceived sx={{ color: "#81c784" }} />
+                      {row.read ? (
+                        <MarkEmailRead
+                          sx={{
+                            color: theme.palette.primary.main,
+                          }}
+                        />
                       ) : (
-                        <CallMade sx={{ color: "#ef5350" }} />
+                        <Tooltip title='Mark as read'>
+                          <IconButton onClick={() => handleMarkAsRead(row.id)}>
+                            <MarkunreadMailbox
+                              sx={{
+                                color: theme.palette.notification.main,
+                              }}
+                            />
+                          </IconButton>
+                        </Tooltip>
                       )}
                     </TableCell>
                   </TableRow>
@@ -208,9 +206,9 @@ const TransactionsHistory = () => {
             </Table>
           </TableContainer>
         </Paper>
-      )}
-    </Box>
+      ) : null}
+    </>
   );
 };
 
-export default TransactionsHistory;
+export default NotificationsTable;
