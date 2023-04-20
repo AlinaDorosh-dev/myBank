@@ -27,7 +27,7 @@ const TransactionsTable = () => {
   const theme = useTheme();
 
   //retrieve transactions state
-  const { transactions, loading } = useContext(TransactionsContext);
+  const { transactions } = useContext(TransactionsContext);
 
   //states for pagination
   const [page, setPage] = useState(0);

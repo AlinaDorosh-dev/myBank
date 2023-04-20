@@ -1,7 +1,7 @@
 /**
  * @fileoverview Theme for the application
  */
-import { cyan, grey, yellow } from "@mui/material/colors";
+import { cyan, grey, yellow, orange } from "@mui/material/colors";
 import { createTheme } from "@mui/material";
 
 const theme = createTheme({
@@ -14,6 +14,7 @@ const theme = createTheme({
     },
     notification: {
       main: yellow[800],
+      delete: orange[900],
     },
     tableRow: {
       even: grey[200],

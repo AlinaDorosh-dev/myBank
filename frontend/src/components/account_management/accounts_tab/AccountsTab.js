@@ -137,7 +137,7 @@ const AccountsTab = () => {
               </Box>
             </>
           )}
-          {noAccounts && !error && (
+          {!loading && noAccounts && !error && (
             <Typography
               color={theme.palette.primary.dark}
               sx={{ p: 2, mt: 12, width: "100%", textAlign: "center" }}

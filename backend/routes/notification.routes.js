@@ -8,11 +8,15 @@ const router = express.Router();
 const {
   getUsersNotifications,
   updateNotification,
+  deleteNotification,
 } = require("../controllers/notification.controller");
 
 const verifyToken = require("../middleware/verifyToken");
 
 router.route("/").get(verifyToken, getUsersNotifications);
-router.route("/:id").patch(verifyToken, updateNotification);
+router
+  .route("/:id")
+  .patch(verifyToken, updateNotification)
+  .delete(verifyToken, deleteNotification);
 
 module.exports = router;

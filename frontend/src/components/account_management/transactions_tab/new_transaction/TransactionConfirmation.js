@@ -22,7 +22,7 @@ const TransactionConfirmation = () => {
   const { auth } = useAuth();
 
   //retrieve transactions state
-  const { setTransactions } = useContext(TransactionsContext);
+  const { setTransactions, setNoTransactions } = useContext(TransactionsContext);
 
   const {
     transaction,
@@ -79,6 +79,7 @@ const TransactionConfirmation = () => {
           : acc
       );
       setAccounts(updatedAccounts);
+      setNoTransactions(false);
     }
   }, [response, error]);
 

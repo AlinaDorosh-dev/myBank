@@ -72,10 +72,10 @@ const NewAccountBtn = () => {
       setOpenAlert(true);
       setTimeout(() => {
         handleCloseModal();
-      }, 2500);
+      }, 2000);
       setTimeout(() => {
         setOpenAlert(false);
-      }, 3000);
+      }, 2200);
       return;
     }
 
@@ -90,10 +90,10 @@ const NewAccountBtn = () => {
     setOpenAlert(true);
     setTimeout(() => {
       handleCloseModal();
-    }, 2500);
+    }, 2000);
     setTimeout(() => {
       setOpenAlert(false);
-    }, 3000);
+    }, 2200);
   };
   return (
     <>
@@ -156,9 +156,34 @@ const NewAccountBtn = () => {
               </>
             )}
             {!loading && openAlert && !accountsExcess && (
-              <Alert severity={!error ? "success" : "error"}>
-                {!error ? "Account created successfully" : `${error}`}
-              </Alert>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  mt: 2,
+                }}
+              >
+                <Alert
+                  severity={!error ? "success" : "error"}
+                  sx={{
+                    display: "block",
+                    flexDirection: "column",
+                  }}
+                >
+                  {!error ? "Account created successfully" : `${error}`}
+                </Alert>
+                <Button
+                  variant='outlined'
+                  onClick={handleCloseModal}
+                  sx={{
+                    display: "block",
+                    mt: 2,
+                    width: "100px",
+                  }}
+                >
+                  OK
+                </Button>
+              </Box>
             )}
             {!loading && openAlert && accountsExcess && (
               <Alert severity='warning'>

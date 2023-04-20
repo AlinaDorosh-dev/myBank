@@ -20,6 +20,7 @@ import {
   NavigateNext,
   MarkEmailRead,
   MarkunreadMailbox,
+  Delete,
 } from "@mui/icons-material";
 import axiosInstance from "../../../api/myBankApi";
 import useAxios from "../../../hooks/useAxios";
@@ -49,6 +50,7 @@ const NotificationsTable = () => {
     { field: "date", headerName: "Date" },
     { field: "message", headerName: "Message" },
     { field: "read", headerName: "Read" },
+    { field: "delete", headerName: "Delete" },
   ];
 
   //Reformat notifications data to be displayed in table
@@ -94,6 +96,19 @@ const NotificationsTable = () => {
     });
     const updatedNotifications = notifications.map((notification) =>
       notification._id === id ? { ...notification, read: true } : notification
+    );
+    setNotifications(updatedNotifications);
+  };
+
+  //function for handling deleting notifications
+  const handleDetete = (id) => {
+    axiosFetch({
+      axiosInstance: axiosInstance(auth),
+      method: "DELETE",
+      url: `/notifications/${id}`,
+    });
+    const updatedNotifications = notifications.filter(
+      (notification) => notification._id !== id
     );
     setNotifications(updatedNotifications);
   };
@@ -203,6 +218,18 @@ const NotificationsTable = () => {
                         </Tooltip>
                       )}
                     </TableCell>
+                    <TableCell align='center'>
+                      <Tooltip title='Delete'>
+                        <IconButton onClick={() => handleDetete(row.id)}>
+                          <Delete 
+                            sx={{
+                              color: theme.palette.notification.delete,
+                            }}
+                          />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+
                   </TableRow>
                 ))}
               </TableBody>
