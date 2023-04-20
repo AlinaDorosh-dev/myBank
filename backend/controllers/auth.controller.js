@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains all the functions that will be used to handle the requests made to the /auth route, it handles the login of users.
+ */
+
 const bcrypt = require("bcrypt");
 const asyncHandler = require("express-async-handler");
 const User = require("../models/user.model");

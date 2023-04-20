@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains axios instance for handling requests to the backend
+ */
 import axios from "axios";
 import { BASE_URL } from "../config";
 

@@ -1,3 +1,6 @@
+/**
+ * @@fileoverview This file contains the RegistrationProvider component which is used to manage and provide the state for finishing the registration process to all components that need it.
+ */
 import { createContext, useState } from "react";
 import useAxios from "../hooks/useAxios";
 import useAuth from "../hooks/useAuth";

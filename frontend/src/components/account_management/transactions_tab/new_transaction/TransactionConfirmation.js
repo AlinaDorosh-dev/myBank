@@ -60,7 +60,6 @@ const TransactionConfirmation = () => {
 
   //update alert state when response or error changes
   useEffect(() => {
-    console.log("accounts", accounts);
     if (response?.data || error) {
       setOpenAlert(true);
     }

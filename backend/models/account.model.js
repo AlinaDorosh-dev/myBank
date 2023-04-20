@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the schema for the account model, it is used to create documents in the accounts collection in the database
+ */
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -33,12 +36,4 @@ const Account = mongoose.model("Account", accountSchema);
 
 module.exports = Account;
 
-//TODO:
 
-// transactionType: {
-//   type: String,
-//   enum: ["credit", "debit"],
-//   required: true,
-// },
-// cards:[{ type: Schema.Types.ObjectId, ref: "Card" }],
-// creditLimit: { type: Number, required: true, default: 0 },

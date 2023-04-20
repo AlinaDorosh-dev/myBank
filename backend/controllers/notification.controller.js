@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains all the functions that will be used to handle the requests made to the /notifications route, it handles the retrieval of notifications from a user and the update of a notification when it is read
+ */
+
 const asyncHandler = require("express-async-handler");
 const Notification = require("../models/notification.model");
 

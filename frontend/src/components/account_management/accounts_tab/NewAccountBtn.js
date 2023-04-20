@@ -18,7 +18,6 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import { NEW_ACCOUNT_URL } from "../../../api/config";
 import { modalStyle } from "../../../styles/modalStyle";
 
 const NewAccountBtn = () => {
@@ -84,7 +83,7 @@ const NewAccountBtn = () => {
     await axiosFetch({
       axiosInstance: axiosInstance(auth),
       method: "POST",
-      url: NEW_ACCOUNT_URL,
+      url: "/accounts/new",
     });
 
     //show alert

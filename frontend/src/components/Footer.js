@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the Footer component which is used to display the footer
+ */
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@emotion/react";
 const Footer = () => {

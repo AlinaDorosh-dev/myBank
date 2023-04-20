@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains all the functions that will be used to handle the requests made to the /accounts route, it handles the creation of new accounts, the desactivation of accounts and the retrieval of accounts from a user
+ */
+
 const asyncHandler = require("express-async-handler");
 const Account = require("../models/account.model");
 const User = require("../models/user.model");

@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the About component which is used to display information about the app
+ */
 import { Paper, Box, Typography, Link, List, ListItem } from "@mui/material";
 import {
   PersonAddAltTwoTone,

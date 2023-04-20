@@ -1,3 +1,8 @@
+/**
+ * @fileoverview This file contains the error handler middleware function, it is used to handle any errors that occur in the application, it logs the error to a file and returns a json object with the error message and stack trace
+ * 
+ */
+
 const { logEvents } = require("./logger");
 
 const errorHandler = (err, req, res, next) => {

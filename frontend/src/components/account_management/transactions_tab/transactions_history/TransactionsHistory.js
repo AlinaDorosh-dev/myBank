@@ -1,7 +1,7 @@
 /**
  * @fileoverview This file contains the TransactionsHistory component. This component is used to display users transactions history
  */
-import { Typography, Box, CircularProgress, Alert } from "@mui/material";
+import { Typography, CircularProgress, Alert } from "@mui/material";
 
 import { TransactionsContext } from "../../../../context/TransactionsProvider";
 import { useContext } from "react";

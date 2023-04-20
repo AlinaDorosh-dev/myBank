@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains all the functions that will be used to handle the requests made to the /transactions route, it handles the creation of a new transaction and the retrieval of transactions from a user
+ */
+
 const asyncHandler = require("express-async-handler");
 const Account = require("../models/account.model");
 const Transaction = require("../models/transaction.model");

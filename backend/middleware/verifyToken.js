@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Middleware to verify the token
+ */
 const jwt = require("jsonwebtoken");
 
 const verifyToken = (req, res, next) => {
@@ -22,7 +25,6 @@ const verifyToken = (req, res, next) => {
         email: decoded.UserInfo.email,
         role: decoded.UserInfo.role,
       };
-      console.log(req.user);
       next();
     });
   } catch (error) {

@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the AccountManagement component which is the main component for the account management page.
+ */
 import DashboardDrawer from "./DashboardDrawer";
 import { Box } from "@mui/material";
 import { useState } from "react";

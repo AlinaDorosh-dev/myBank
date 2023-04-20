@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the reducer for manage state in the sign up form
+ */
 import { EMAIL_REGEX, PWD_REGEX } from "../utils/regex";
 
 export const initialSignUpState = {

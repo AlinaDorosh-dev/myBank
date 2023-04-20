@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Transactions table component. Displays users transactions sorted by date in a table
+ */
 import {
   Typography,
   Box,

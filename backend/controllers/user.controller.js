@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains all the functions that will be used to handle the requests made to the /signup route, it handles the creation of new users. And to handle the requests made to the /auth/:id route, it handles the retrieval and update of a user's information.
+ */
+
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const asyncHandler = require("express-async-handler");
@@ -71,7 +75,6 @@ const createNewUser = asyncHandler(async (req, res) => {
 // @route PATCH auth/user/:id
 // @access Private
 const updateUser = asyncHandler(async (req, res) => {
-  console.log("req.body", req.body);
   const { id } = req.params;
 
   if (id !== req.user.id) {
@@ -105,7 +108,7 @@ const updateUser = asyncHandler(async (req, res) => {
     //Check if user has 18 years
     if (birthDate) {
       let isAdult = ageValidation(birthDate);
-      console.log("isAdult", isAdult);
+
       if (!isAdult) {
         res.status(422).json({
           status: "failed",
@@ -149,7 +152,7 @@ const updateUser = asyncHandler(async (req, res) => {
             new: true,
           }
         );
-        console.log("user was updated", updatedUser);
+
         res.status(200).json({ status: "succeeded", updatedUser, error: null });
       }
     } else {
@@ -164,7 +167,7 @@ const updateUser = asyncHandler(async (req, res) => {
           new: true,
         }
       );
-      console.log("user was updated", updatedUser);
+
       res.status(200).json({ status: "succeeded", updatedUser, error: null });
     }
   } catch (error) {

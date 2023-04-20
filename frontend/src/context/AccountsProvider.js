@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the AccountsProvider component which is used to manage and provide the accounts state to all components that need it
+ */
 import { createContext } from "react";
 import { useState } from "react";
 

@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the Contact component which is used to display contact information
+ */
 import {
   Box,
   Paper,

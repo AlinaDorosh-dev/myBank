@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the NewTransactionProvider component which is used to manage and provide state for new transaction creation to all components that need it
+ */
 import { createContext, useState } from "react";
 
 export const NewTransactionContext = createContext({});

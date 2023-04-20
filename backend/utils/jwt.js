@@ -1,3 +1,8 @@
+/**
+ * @fileoverview JWT token generation
+ * @param {Object} user
+ * @returns {String} token
+ */
 const jwt = require("jsonwebtoken");
 
 const generateAccessToken = (user) => {

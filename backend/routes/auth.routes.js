@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains all routes for the user controller and the auth controller
+ */
+
 const express = require("express");
 const router = express.Router();
 const {

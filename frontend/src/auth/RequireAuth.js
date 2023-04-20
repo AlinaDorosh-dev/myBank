@@ -1,3 +1,8 @@
+/**
+ * @fileoverview This file contains the RequireAuth component which is used to
+ * check if the user is logged in and if the user is authorized to access the
+ * route
+ */
 import { useNavigate, Outlet } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import useAuth from "../hooks/useAuth";

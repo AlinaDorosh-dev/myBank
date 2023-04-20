@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Sign Up Form component 
+ */
 import {
   Box,
   Typography,
@@ -111,7 +114,6 @@ const SignUpForm = () => {
   };
 
   const handleSignUp = () => {
-    console.log("Sign up:", newUser);
     switch (true) {
       case !state.email || !state.pwd || !state.matchPwd:
         dispatch({

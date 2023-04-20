@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the schema for the notification model, it is used to create documents in the notifications collection in the database
+ */
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 

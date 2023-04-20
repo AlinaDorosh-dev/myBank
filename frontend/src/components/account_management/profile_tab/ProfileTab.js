@@ -1,3 +1,7 @@
+/**
+ * @fileoverview ProfileTab component renders the profile tab in the account management page.
+ * It displays the user's profile information 
+ */
 import axiosInstance from "../../../api/myBankApi";
 import useAxios from "../../../hooks/useAxios";
 import useAuth from "../../../hooks/useAuth";

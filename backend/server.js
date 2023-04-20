@@ -1,12 +1,15 @@
+/**
+ * @fileoverview This file contains the server setup and configuration
+ */
 require("dotenv").config();
 const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", true);
 const { logger, logEvents } = require("./middleware/logger");
-const cookieParser = require("cookie-parser");
+
 const { connectDB } = require("./config/dbConn");
-//const corsOptions = require("./config/corsOptions");
+
 const errorHandler = require("./middleware/errorHandler");
 
 connectDB();
@@ -16,7 +19,7 @@ const db = mongoose.connection;
 const PORT = process.env.PORT || 8000;
 const app = express();
 
-//app.use(cors(corsOptions))
+
 
 const corsOptions = {
   origin: true,
@@ -29,7 +32,7 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: false }));
 
-//app.use(cookieParser);
+
 app.use(logger);
 
 app.use("/auth", require("./routes/auth.routes"));

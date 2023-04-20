@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the Home component which is used to display the landing page of the application
+ */
 import { Typography, Box, Button, Paper, Grow } from "@mui/material";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import { useNavigate } from "react-router-dom";

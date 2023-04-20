@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the schema for the transaction model, it is used to create documents in the transactions collection in the database
+ */
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 

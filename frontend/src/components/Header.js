@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the Header component which is used to display the header with navigaton links and the drawer for navigation on mobile
+ */
 import {
   AppBar,
   Box,
@@ -145,9 +148,9 @@ function Header(props) {
             <MenuIcon />
           </IconButton>
           <Typography
-            variant='h6'
+            variant='h5'
             component='div'
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" },color: "white" }}
           >
             myBank
           </Typography>

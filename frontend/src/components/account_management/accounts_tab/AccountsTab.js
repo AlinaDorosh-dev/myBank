@@ -5,11 +5,10 @@
 
 import NewAccountBtn from "./NewAccountBtn";
 import { Box, Paper, Typography, Alert } from "@mui/material";
-import { useState, useEffect, useContext } from "react";
+import { useEffect, useContext } from "react";
 import axiosInstance from "../../../api/myBankApi";
 import useAxios from "../../../hooks/useAxios";
 import useAuth from "../../../hooks/useAuth";
-import { ACCOUNTS_URL } from "../../../api/config";
 import { useTheme } from "@mui/material/styles";
 import { AccountsContext } from "../../../context/AccountsProvider";
 
@@ -19,7 +18,6 @@ const AccountsTab = () => {
     accounts,
     setAccounts,
     totalBalance,
-    setTotalBalance,
     noAccounts,
     setNoAccounts,
   } = useContext(AccountsContext);
@@ -37,7 +35,7 @@ const AccountsTab = () => {
     axiosFetch({
       axiosInstance: axiosInstance(auth),
       method: "GET",
-      url: ACCOUNTS_URL,
+      url: "/accounts",
     });
   }, []);
 

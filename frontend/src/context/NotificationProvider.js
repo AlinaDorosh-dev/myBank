@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the NotificationProvider component which is used to manage and provide the notifications state to all components that need it
+ */
 import { createContext, useState, useEffect } from "react";
 import useAxios from "../hooks/useAxios";
 import useAuth from "../hooks/useAuth";

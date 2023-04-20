@@ -1,3 +1,8 @@
+/**
+ * @fileoverview This file contains age validation function to check if the user is 18 years old or older
+ * @param {Date} birthDate 
+ * @returns {Boolean}
+ */
 const ageValidation = (birthDate) => {
   let today = new Date();
   let birthDateDate = new Date(birthDate);

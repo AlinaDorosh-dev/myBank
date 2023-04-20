@@ -1,3 +1,7 @@
+/**
+ * @fileoverview This file contains all notification routes for the notification controller
+ */
+
 const express = require("express");
 const router = express.Router();
 

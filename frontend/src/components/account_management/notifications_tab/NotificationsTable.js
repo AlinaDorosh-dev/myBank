@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the NotificationsTable component which displays users notifications sorted by date in a table and allows them to mark them as read.
+ */
 import {
   Typography,
   Box,

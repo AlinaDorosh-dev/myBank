@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains all account routes for the account controller
+ */
 const express = require("express");
 const router = express.Router();
 const {

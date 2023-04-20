@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file contains the logger middleware function, it is used to log all requests made to the server, it also logs any errors that occur in requests or in connecting to the database
+ */
 const { format } = require('date-fns')
 const { v4: uuid } = require('uuid')
 const fs = require('fs')

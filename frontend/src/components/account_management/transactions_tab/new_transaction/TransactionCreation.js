@@ -153,7 +153,7 @@ const TransactionCreation = () => {
       [e.target.name]: e.target.value,
     });
   };
-  console.log(accounts);
+
 
   return (
     <>
