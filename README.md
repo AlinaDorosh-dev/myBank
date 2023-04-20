@@ -170,8 +170,6 @@ All styles and layout created with customized MUI components
  ┃ ┣ 📜App.js
  ┃ ┣ 📜config.js
  ┃ ┗ 📜index.js
- ┣ 📜.gitignore
- ┣ 📜README.md
  ┣ 📜package-lock.json
  ┗ 📜package.json
  ```
