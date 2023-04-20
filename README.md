@@ -1,4 +1,4 @@
-![Banner](https://github.com/AlinaDorosh-dev/myBank/blob/frontend/public/img/banner.jpeg)
+![Banner](https://github.com/AlinaDorosh-dev/myBank/blob/main/frontend/public/img/banner.jpeg)
 
 ## **Description**
 
