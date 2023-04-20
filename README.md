@@ -21,7 +21,7 @@ This is a responsive banking app. Built as a personal project to improve practic
 
 :large_blue_diamond: Check transactions history
 
-:large_blue_diamond: Get notifications about new incoming transactions
+:large_blue_diamond: Get notifications about new incoming transactions. Mark them as read or delete.
 
 ## **Installation** :building_construction:	
 ### Backend :construction_worker_woman:
@@ -166,7 +166,6 @@ All styles and layout created with customized MUI components
  ┃ ┣ 📂utils
  ┃ ┃ ┣ 📜ageValidation.js
  ┃ ┃ ┗ 📜regex.js
- ┃ ┣ 📜9729.jpg
  ┃ ┣ 📜App.js
  ┃ ┣ 📜config.js
  ┃ ┗ 📜index.js
