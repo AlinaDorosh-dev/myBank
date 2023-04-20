@@ -87,13 +87,13 @@ const NewAccountBtn = () => {
     });
 
     //show alert
-    setOpenAlert(true);
-    setTimeout(() => {
-      handleCloseModal();
-    }, 2000);
-    setTimeout(() => {
-      setOpenAlert(false);
-    }, 2200);
+     setOpenAlert(true);
+    // setTimeout(() => {
+    //   handleCloseModal();
+    // }, 2000);
+    // setTimeout(() => {
+    //   setOpenAlert(false);
+    // }, 2200);
   };
   return (
     <>
@@ -159,16 +159,14 @@ const NewAccountBtn = () => {
               <Box
                 sx={{
                   display: "flex",
+                  flexDirection: "column",
                   justifyContent: "center",
                   mt: 2,
                 }}
               >
                 <Alert
                   severity={!error ? "success" : "error"}
-                  sx={{
-                    display: "block",
-                    flexDirection: "column",
-                  }}
+                  sx={{ textAlign: "center" }}
                 >
                   {!error ? "Account created successfully" : `${error}`}
                 </Alert>
@@ -179,6 +177,8 @@ const NewAccountBtn = () => {
                     display: "block",
                     mt: 2,
                     width: "100px",
+                    ml: "auto",
+                    mr: "auto",
                   }}
                 >
                   OK

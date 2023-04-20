@@ -150,7 +150,12 @@ function Header(props) {
           <Typography
             variant='h5'
             component='div'
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" },color: "white" }}
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", sm: "block" },
+              color: "white",
+              textShadow: "1px 2px 1px rgba(0, 0, 0, 0.4)",
+            }}
           >
             myBank
           </Typography>

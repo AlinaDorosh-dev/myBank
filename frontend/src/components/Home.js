@@ -6,7 +6,7 @@ import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   return (
     <Box sx={{ margin: "1rem 2rem" }}>
       <Box>
@@ -19,7 +19,13 @@ const Home = () => {
             exit: "linear",
           }}
         >
-          <Typography variant='h2' align='center'>
+          <Typography
+            variant='h2'
+            align='center'
+            sx={{
+              textShadow: "1px 2px 1px rgba(0, 0, 0, 0.4)",
+            }}
+          >
             Welcome to myBank
           </Typography>
         </Grow>
@@ -28,7 +34,9 @@ const Home = () => {
         </Typography>
       </Box>
 
-      <Paper variant='elevation' sx={{ mt: 3, p: 2 }}>
+      <Paper variant='elevation'
+        elevation={8} 
+      sx={{ mt: 3, p: 2 }}>
         <CardGiftcardIcon
           color='primary'
           sx={{ m: ".7rem auto", display: "block", fontSize: "4rem" }}
